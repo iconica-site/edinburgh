@@ -89,12 +89,18 @@ const keyframes = {};
 const agingSection = document.querySelector(".aging");
 /** @type {HTMLElement} */
 const endAnimationBlock = document.querySelector(".animation-end");
+/** @type {HTMLElement} */
+const strengthBlock = document.querySelector(".strength");
+/** @type {HTMLElement} */
+const strengthBottom = document.querySelector(".strength-bottom");
 
-let agingSectionTop = agingSection?.getBoundingClientRect().top + scrollY - 1;
-let endAnimationBlockTop = endAnimationBlock?.getBoundingClientRect().top + scrollY - 1;
+let agingSectionTop;
+let endAnimationBlockTop;
+let strengthBottomTop;
 let endAnimation;
 let isStyleComputed = false;
 
+calcElementsRect();
 scrollEvent(scrollY);
 
 window.addEventListener("scroll", (event) => {
@@ -106,12 +112,17 @@ window.addEventListener("scroll", (event) => {
 if (wrapper) {
   const wrapperResizeObserver = new ResizeObserver(entries => {
     entries.forEach(entry => {
-      agingSectionTop = agingSection?.getBoundingClientRect().top + scrollY - 1;
-      endAnimationBlockTop = endAnimationBlock?.getBoundingClientRect().top + scrollY - 1;
+      calcElementsRect();
     });
   });
 
   wrapperResizeObserver.observe(wrapper);
+}
+
+function calcElementsRect() {
+  agingSectionTop = agingSection?.getBoundingClientRect().top + scrollY - 1;
+  endAnimationBlockTop = endAnimationBlock?.getBoundingClientRect().top + scrollY - 1;
+  strengthBottomTop = strengthBottom?.getBoundingClientRect().top + scrollY - 1;
 }
 
 function scrollEvent(y) {
@@ -123,7 +134,7 @@ function scrollEvent(y) {
   agingSection?.classList.toggle("aging--animate", y >= agingSectionTop);
   wrapper?.classList.toggle("fill-glass", y >= endAnimationBlockTop - screenHeight);
 
-  console.log(endAnimationBlockTop, endAnimationBlockTop - screenHeight * 0.5, scrollY);
+  strengthBlock?.classList.toggle("strength--move", y >= strengthBottomTop - screenHeight * 0.9);
 
   if (bottle) {
     if (!isStyleComputed) {
@@ -143,7 +154,6 @@ function scrollEvent(y) {
   }
 }
 
-
 animationElements.forEach((element, index, array) => {
   const { dataset } = element;
   const { animation } = dataset;
@@ -156,6 +166,8 @@ animationElements.forEach((element, index, array) => {
   if (persentage > 100) persentage = 100;
 
   keyframes[`${persentage}%`] = animation;
+
+  if (index === array.length - 1 && !persentage["100%"]) keyframes["100%"] = animation;
 });
 
 const headElement = document.querySelector("head");
