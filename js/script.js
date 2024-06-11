@@ -87,12 +87,17 @@ const animationElements = document.querySelectorAll("[data-animation]");
 const keyframes = {};
 /** @type {HTMLElement} */
 const agingSection = document.querySelector(".aging");
+/** @type {HTMLElement} */
+const endAnimationBlock = document.querySelector(".animation-end");
 
 let agingSectionTop = agingSection?.getBoundingClientRect().top + scrollY - 1;
+let endAnimationBlockTop = endAnimationBlock?.getBoundingClientRect().top + scrollY - 1;
+let endAnimation;
+let isStyleComputed = false;
 
 scrollEvent(scrollY);
 
-window.addEventListener("scroll", () => {
+window.addEventListener("scroll", (event) => {
   const y = scrollY;
 
   scrollEvent(y);
@@ -102,6 +107,7 @@ if (wrapper) {
   const wrapperResizeObserver = new ResizeObserver(entries => {
     entries.forEach(entry => {
       agingSectionTop = agingSection?.getBoundingClientRect().top + scrollY - 1;
+      endAnimationBlockTop = endAnimationBlock?.getBoundingClientRect().top + scrollY - 1;
     });
   });
 
@@ -109,10 +115,34 @@ if (wrapper) {
 }
 
 function scrollEvent(y) {
+  const screenHeight = document.documentElement.clientHeight;
+
   bottle?.classList.toggle("bottle--animate", y > 0);
+  bottle?.classList.toggle("bottle--open", y >= agingSectionTop + screenHeight * 0.25);
   scroll_heroScroll?.classList.toggle("bottle__scroll--hide", y > 0);
   agingSection?.classList.toggle("aging--animate", y >= agingSectionTop);
+  wrapper?.classList.toggle("fill-glass", y >= endAnimationBlockTop - screenHeight);
+
+  console.log(endAnimationBlockTop, endAnimationBlockTop - screenHeight * 0.5, scrollY);
+
+  if (bottle) {
+    if (!isStyleComputed) {
+      scrollBy({
+        top: -1,
+        behavior: "smooth",
+      });
+
+      isStyleComputed = true;
+    }
+
+    const transform = getComputedStyle(bottle).transform;
+    const [a, b] = transform.replaceAll(/matrix\(|\)/g, "").split(",");
+    const deg = Math.atan2(b, a) * (180 / Math.PI);
+
+    bottle.style.setProperty("--bottle-rotate", deg);
+  }
 }
+
 
 animationElements.forEach((element, index, array) => {
   const { dataset } = element;
