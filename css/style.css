@@ -2512,13 +2512,13 @@ body:not(.start-animation) .hero-top__text {
 .products--animate .visual-images__image--red {
   z-index: -1;
   filter: blur(8.75px);
-  transform: scale(0.627700127) translate(-83.0578512397%, -13.0876747141%);
+  transform: scale(0.627700127) translate(83.0578512397%, -13.0876747141%);
 }
 
 .products:not(.products--animate) .visual-images__image--green {
   z-index: -1;
   filter: blur(8.75px);
-  transform: scale(0.627700127) translate(-83.0578512397%, -13.0876747141%);
+  transform: scale(0.627700127) translate(83.0578512397%, -13.0876747141%);
 }
 
 .products-content {
