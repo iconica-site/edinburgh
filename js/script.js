@@ -445,7 +445,7 @@ function utils_elementTransitionEnd(el, callback) {
     el.addEventListener('transitionend', fireCallBack);
   }
 }
-function utils_elementOuterSize(el, size, includeMargins) {
+function elementOuterSize(el, size, includeMargins) {
   const window = ssr_window_esm_getWindow();
   if (includeMargins) {
     return el[size === 'width' ? 'offsetWidth' : 'offsetHeight'] + parseFloat(window.getComputedStyle(el, null).getPropertyValue(size === 'width' ? 'margin-right' : 'margin-top')) + parseFloat(window.getComputedStyle(el, null).getPropertyValue(size === 'width' ? 'margin-left' : 'margin-bottom'));
@@ -936,7 +936,7 @@ function updateSlides() {
         slide.style.webkitTransform = 'none';
       }
       if (params.roundLengths) {
-        slideSize = swiper.isHorizontal() ? utils_elementOuterSize(slide, 'width', true) : utils_elementOuterSize(slide, 'height', true);
+        slideSize = swiper.isHorizontal() ? elementOuterSize(slide, 'width', true) : elementOuterSize(slide, 'height', true);
       } else {
         // eslint-disable-next-line
         const width = getDirectionPropertyValue(slideStyles, 'width');
@@ -5472,6 +5472,17 @@ function Navigation(_ref) {
 
 
 
+;// CONCATENATED MODULE: ./node_modules/swiper/shared/classes-to-selector.mjs
+function classes_to_selector_classesToSelector(classes) {
+  if (classes === void 0) {
+    classes = '';
+  }
+  return `.${classes.trim().replace(/([\.:!+\/])/g, '\\$1') // eslint-disable-line
+  .replace(/ /g, '.')}`;
+}
+
+
+
 ;// CONCATENATED MODULE: ./node_modules/swiper/modules/pagination.mjs
 
 
@@ -5541,12 +5552,12 @@ function Pagination(_ref) {
     }
   }
   function onBulletClick(e) {
-    const bulletEl = e.target.closest(classesToSelector(swiper.params.pagination.bulletClass));
+    const bulletEl = e.target.closest(classes_to_selector_classesToSelector(swiper.params.pagination.bulletClass));
     if (!bulletEl) {
       return;
     }
     e.preventDefault();
-    const index = elementIndex(bulletEl) * swiper.params.slidesPerGroup;
+    const index = utils_elementIndex(bulletEl) * swiper.params.slidesPerGroup;
     if (swiper.params.loop) {
       if (swiper.realIndex === index) return;
       swiper.slideToLoop(index);
@@ -5560,7 +5571,7 @@ function Pagination(_ref) {
     const params = swiper.params.pagination;
     if (isPaginationDisabled()) return;
     let el = swiper.pagination.el;
-    el = makeElementsArray(el);
+    el = utils_makeElementsArray(el);
     // Current/Total
     let current;
     let previousIndex;
@@ -5605,7 +5616,7 @@ function Pagination(_ref) {
       });
       if (el.length > 1) {
         bullets.forEach(bullet => {
-          const bulletIndex = elementIndex(bullet);
+          const bulletIndex = utils_elementIndex(bullet);
           if (bulletIndex === current) {
             bullet.classList.add(...params.bulletActiveClass.split(' '));
           } else if (swiper.isElement) {
@@ -5656,10 +5667,10 @@ function Pagination(_ref) {
     }
     el.forEach((subEl, subElIndex) => {
       if (params.type === 'fraction') {
-        subEl.querySelectorAll(classesToSelector(params.currentClass)).forEach(fractionEl => {
+        subEl.querySelectorAll(classes_to_selector_classesToSelector(params.currentClass)).forEach(fractionEl => {
           fractionEl.textContent = params.formatFractionCurrent(current + 1);
         });
-        subEl.querySelectorAll(classesToSelector(params.totalClass)).forEach(totalEl => {
+        subEl.querySelectorAll(classes_to_selector_classesToSelector(params.totalClass)).forEach(totalEl => {
           totalEl.textContent = params.formatFractionTotal(total);
         });
       }
@@ -5678,7 +5689,7 @@ function Pagination(_ref) {
         } else {
           scaleY = scale;
         }
-        subEl.querySelectorAll(classesToSelector(params.progressbarFillClass)).forEach(progressEl => {
+        subEl.querySelectorAll(classes_to_selector_classesToSelector(params.progressbarFillClass)).forEach(progressEl => {
           progressEl.style.transform = `translate3d(0,0,0) scaleX(${scaleX}) scaleY(${scaleY})`;
           progressEl.style.transitionDuration = `${swiper.params.speed}ms`;
         });
@@ -5701,7 +5712,7 @@ function Pagination(_ref) {
     if (isPaginationDisabled()) return;
     const slidesLength = swiper.virtual && swiper.params.virtual.enabled ? swiper.virtual.slides.length : swiper.grid && swiper.params.grid.rows > 1 ? swiper.slides.length / Math.ceil(swiper.params.grid.rows) : swiper.slides.length;
     let el = swiper.pagination.el;
-    el = makeElementsArray(el);
+    el = utils_makeElementsArray(el);
     let paginationHTML = '';
     if (params.type === 'bullets') {
       let numberOfBullets = swiper.params.loop ? Math.ceil(slidesLength / swiper.params.slidesPerGroup) : swiper.snapGrid.length;
@@ -5737,7 +5748,7 @@ function Pagination(_ref) {
         subEl.innerHTML = paginationHTML || '';
       }
       if (params.type === 'bullets') {
-        swiper.pagination.bullets.push(...subEl.querySelectorAll(classesToSelector(params.bulletClass)));
+        swiper.pagination.bullets.push(...subEl.querySelectorAll(classes_to_selector_classesToSelector(params.bulletClass)));
       }
     });
     if (params.type !== 'custom') {
@@ -5745,7 +5756,7 @@ function Pagination(_ref) {
     }
   }
   function init() {
-    swiper.params.pagination = createElementIfNotDefined(swiper, swiper.originalParams.pagination, swiper.params.pagination, {
+    swiper.params.pagination = create_element_if_not_defined_createElementIfNotDefined(swiper, swiper.originalParams.pagination, swiper.params.pagination, {
       el: 'swiper-pagination'
     });
     const params = swiper.params.pagination;
@@ -5766,7 +5777,7 @@ function Pagination(_ref) {
       // check if it belongs to another nested Swiper
       if (el.length > 1) {
         el = el.filter(subEl => {
-          if (elementParents(subEl, '.swiper')[0] !== swiper.el) return false;
+          if (utils_elementParents(subEl, '.swiper')[0] !== swiper.el) return false;
           return true;
         })[0];
       }
@@ -5775,7 +5786,7 @@ function Pagination(_ref) {
     Object.assign(swiper.pagination, {
       el
     });
-    el = makeElementsArray(el);
+    el = utils_makeElementsArray(el);
     el.forEach(subEl => {
       if (params.type === 'bullets' && params.clickable) {
         subEl.classList.add(...(params.clickableClass || '').split(' '));
@@ -5805,7 +5816,7 @@ function Pagination(_ref) {
     if (isPaginationDisabled()) return;
     let el = swiper.pagination.el;
     if (el) {
-      el = makeElementsArray(el);
+      el = utils_makeElementsArray(el);
       el.forEach(subEl => {
         subEl.classList.remove(params.hiddenClass);
         subEl.classList.remove(params.modifierClass + params.type);
@@ -5824,7 +5835,7 @@ function Pagination(_ref) {
     let {
       el
     } = swiper.pagination;
-    el = makeElementsArray(el);
+    el = utils_makeElementsArray(el);
     el.forEach(subEl => {
       subEl.classList.remove(params.horizontalClass, params.verticalClass);
       subEl.classList.add(swiper.isHorizontal() ? params.horizontalClass : params.verticalClass);
@@ -5860,7 +5871,7 @@ function Pagination(_ref) {
       el
     } = swiper.pagination;
     if (el) {
-      el = makeElementsArray(el);
+      el = utils_makeElementsArray(el);
       el.forEach(subEl => subEl.classList[swiper.enabled ? 'remove' : 'add'](swiper.params.pagination.lockClass));
     }
   });
@@ -5869,7 +5880,7 @@ function Pagination(_ref) {
   });
   on('click', (_s, e) => {
     const targetEl = e.target;
-    const el = makeElementsArray(swiper.pagination.el);
+    const el = utils_makeElementsArray(swiper.pagination.el);
     if (swiper.params.pagination.el && swiper.params.pagination.hideOnClick && el && el.length > 0 && !targetEl.classList.contains(swiper.params.pagination.bulletClass)) {
       if (swiper.navigation && (swiper.navigation.nextEl && targetEl === swiper.navigation.nextEl || swiper.navigation.prevEl && targetEl === swiper.navigation.prevEl)) return;
       const isHidden = el[0].classList.contains(swiper.params.pagination.hiddenClass);
@@ -5887,7 +5898,7 @@ function Pagination(_ref) {
       el
     } = swiper.pagination;
     if (el) {
-      el = makeElementsArray(el);
+      el = utils_makeElementsArray(el);
       el.forEach(subEl => subEl.classList.remove(swiper.params.pagination.paginationDisabledClass));
     }
     init();
@@ -5900,7 +5911,7 @@ function Pagination(_ref) {
       el
     } = swiper.pagination;
     if (el) {
-      el = makeElementsArray(el);
+      el = utils_makeElementsArray(el);
       el.forEach(subEl => subEl.classList.add(swiper.params.pagination.paginationDisabledClass));
     }
     destroy();
@@ -7152,11 +7163,11 @@ function Controller(_ref) {
       if (duration !== 0) {
         c.transitionStart();
         if (c.params.autoHeight) {
-          nextTick(() => {
+          utils_nextTick(() => {
             c.updateAutoHeight();
           });
         }
-        elementTransitionEnd(c.wrapperEl, () => {
+        utils_elementTransitionEnd(c.wrapperEl, () => {
           if (!controlled) return;
           c.transitionEnd();
         });
@@ -9511,11 +9522,16 @@ if (factsSection) {
   const controllers = {
     prev: factsSection.querySelector(".facts-button--prev"),
     next: factsSection.querySelector(".facts-button--next"),
-  }
+  };
+  /** @type {HTMLElement} */
+  const pagination = factsSection.querySelector(".facts-images__pagination");
+
+  let textsSlider;
+  let imagesSlider;
 
   if (factsSlider) {
-    const swiper = new Swiper(factsSlider, {
-      modules: [EffectFade, Navigation,],
+    textsSlider = new Swiper(factsSlider, {
+      modules: [EffectFade, Navigation, Pagination, Controller,],
       fadeEffect: {
         crossFade: true,
       },
@@ -9524,28 +9540,69 @@ if (factsSection) {
         nextEl: controllers.next,
         prevEl: controllers.prev,
       },
-      allowTouchMove: false,
+      pagination: {
+        clickable: true,
+        el: pagination,
+        enabled: true,
+      },
+      breakpoints: {
+        "768.1": {
+          allowTouchMove: false,
+        },
+      },
+      allowTouchMove: true,
       effect: "fade",
       rewind: true,
       speed: 1000,
+      autoHeight: true,
     });
   }
 
   if (factsImages) {
-    const swiper = new Swiper(factsImages, {
-      modules: [Navigation,],
+    imagesSlider = new Swiper(factsImages, {
+      modules: [Navigation, Pagination, Controller,],
       navigation: {
         enabled: true,
         nextEl: controllers.next,
         prevEl: controllers.prev,
       },
-      allowTouchMove: false,
+      pagination: {
+        clickable: true,
+        el: pagination,
+        enabled: true,
+      },
+      breakpoints: {
+        "768.1": {
+          slidesPerView: 1.0881680122,
+          spaceBetween: 383.87,
+          allowTouchMove: false,
+        },
+        "1024.1": {
+          slidesPerView: 1.276827486,
+          spaceBetween: 383.87,
+          allowTouchMove: false,
+        },
+        "1280.1": {
+          slidesPerView: 1.395147365,
+          spaceBetween: 383.87,
+          allowTouchMove: false,
+        },
+        "1440.1": {
+          slidesPerView: 1.66674415,
+          spaceBetween: 511.83,
+          allowTouchMove: false,
+        },
+      },
+      allowTouchMove: true,
       rewind: true,
-      slidesPerView: 1.66674415,
-      spaceBetween: 511.83,
+      slidesPerView: 1,
+      spaceBetween: 20,
       speed: 1000,
     });
   }
+
+  textsSlider.controller.control = imagesSlider;
+  imagesSlider.controller.control = textsSlider;
 }
 
 ;// CONCATENATED MODULE: ./src/js/libraries/swiper/swiper.js
@@ -9772,6 +9829,7 @@ visualButtonItems.forEach(currentItem => {
 
 
 
+// import "./scripts/section.js";
 
 ;// CONCATENATED MODULE: ./src/js/script.js
 
