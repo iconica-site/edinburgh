@@ -12764,51 +12764,74 @@ window.__jr__ = {
 
 ;// CONCATENATED MODULE: ./src/js/scripts/scripts/init.js
 window.addEventListener("load", (event) => {
-  const wrapper = document.querySelector(".wrapper");
-
-  wrapper?.classList.add("init");
+  document.body.classList.add("init");
 });
 
 ;// CONCATENATED MODULE: ./src/js/libraries/locomotive-scroll/locomotive-scroll.js
-function initScroll() {
-  const { __jr__ } = window;
-  const { LocomotiveScroll } = __jr__;
+const { __jr__ } = window;
+const { LocomotiveScroll } = __jr__;
+const MIN_768_PX = matchMedia("(min-width: 768.1px)");
+/** @type {NodeListOf<HTMLElement>} */
+const sections = document.querySelectorAll("[data-section]");
+/** @type {NodeListOf<HTMLElement>} */
+const fixedElements = document.querySelectorAll("[data-scroll-target]")
+/** @type {HTMLElement} */
+const bottle = document.querySelector(".bottle");
+const classNames = {
+  prev: "prev-section",
+  current: "active-section",
+  next: "next-section",
+};
 
-  /** @type {HTMLElement} */
-  const wrapper = document.querySelector(".wrapper");
-  /** @type {HTMLElement} */
-  const bottle = document.querySelector(".bottle");
-  /** @type {HTMLElement} */
-  const heroTop = document.querySelector(".hero-top");
-  /** @type {HTMLElement} */
-  const heroBottom = document.querySelector(".hero-bottom");
-  /** @type {HTMLElement} */
-  const aging = document.querySelector(".aging");
-  /** @type {HTMLElement} */
-  const strengthTopSection = document.querySelector(".strength-top");
-  /** @type {HTMLElement} */
-  const strengthBottomSection = document.querySelector(".strength-bottom");
-  /** @type {HTMLElement} */
-  const quoteSection = document.querySelector(".quote");
-  /** @type {HTMLElement} */
-  const productsSection = document.querySelector(".products");
-  /** @type {HTMLElement} */
-  const factsSection = document.querySelector(".facts");
-  /** @type {HTMLElement} */
-  const cocktailsSection = document.querySelector(".cocktails");
-  /** @type {HTMLElement} */
-  const footer = document.querySelector(".footer");
-  const sections = [heroTop, heroBottom, aging, strengthTopSection, strengthBottomSection, quoteSection, productsSection, factsSection, cocktailsSection, footer,];
+fixedElements.forEach(element => {
+  const { dataset } = element;
+  /** @type { {breakpoint: "min" | "max"} } */
+  const { breakpoint } = dataset;
+
+  element.toggleAttribute("data-scroll", breakpoint === "min" && MIN_768_PX.matches);
+  element.toggleAttribute("data-scroll-sticky", breakpoint === "min" && MIN_768_PX.matches);
+  element.toggleAttribute("data-scroll", breakpoint === "max" && !MIN_768_PX.matches);
+  element.toggleAttribute("data-scroll-sticky", breakpoint === "max" && !MIN_768_PX.matches);
+});
+
+/** @type {HTMLElement[]} */
+let currentSections;
+let firstSection;
+/** @type {LocomotiveScroll} */
+let locomotive;
+
+function initScroll() {
+  currentSections = [...sections]
+    .filter(
+      /** @param {HTMLElement} section */
+      section => {
+        section.classList.remove(classNames.prev);
+        section.classList.remove(classNames.current);
+        section.classList.remove(classNames.next);
+
+        return MIN_768_PX.matches ? !section.hasAttribute("data-mobile") : section;
+      }
+    )
+    .sort(
+      /**
+       * @param {HTMLElement} a
+       * @param {HTMLElement} b
+       */
+      (a, b) => {
+        const { section: aOrder } = a.dataset;
+        const { section: bOrder } = b.dataset;
+
+        return +aOrder - +bOrder;
+      }
+    );
+
+  firstSection = currentSections[0] ?? null;
+
   /** @type { { prev: HTMLElement; current: HTMLElement; next: HTMLElement; } } */
   const activity = {
     prev: null,
-    current: heroTop,
-    next: heroBottom,
-  }
-  const classNames = {
-    prev: "prev-section",
-    current: "active-section",
-    next: "next-section",
+    current: firstSection,
+    next: currentSections[1] ?? null,
   }
 
   /** @type {number} */
@@ -12819,10 +12842,10 @@ function initScroll() {
   /** @type {NodeJS.Timeout} */
   let restartTimeout;
 
-  heroTop.classList.add(classNames.current);
-  heroBottom.classList.add(classNames.next);
+  activity.current?.classList.add(classNames.current);
+  activity.next?.classList.add(classNames.next);
 
-  const locomotive = new LocomotiveScroll({
+  locomotive = new LocomotiveScroll({
     el: document.querySelector(".wrapper"),
     direction: "vertical",
     smooth: true,
@@ -12883,9 +12906,9 @@ function initScroll() {
     scrolled = true;
     locomotive.stop();
 
-    const currentSectionIndex = sections.findIndex(section => section === nextSection);
-    const prev = sections[currentSectionIndex - 1] ?? null;
-    const next = sections[currentSectionIndex + 1] ?? null;
+    const currentSectionIndex = currentSections.findIndex(section => section === nextSection);
+    const prev = currentSections[currentSectionIndex - 1] ?? null;
+    const next = currentSections[currentSectionIndex + 1] ?? null;
 
     let offset = 0;
 
@@ -12935,6 +12958,30 @@ function initScroll() {
   }
 }
 
+MIN_768_PX.addEventListener("change", (event) => {
+  if (firstSection) locomotive.scrollTo(firstSection, {
+    duration: 0,
+    disableLerp: true,
+  });
+
+  locomotive.destroy();
+
+  fixedElements.forEach(element => {
+    const { dataset } = element;
+    /** @type { {breakpoint: "min" | "max"} } */
+    const { breakpoint } = dataset;
+
+    element.toggleAttribute("style", breakpoint === "min" && !event.matches);
+    element.toggleAttribute("data-scroll", breakpoint === "min" && event.matches);
+    element.toggleAttribute("data-scroll-sticky", breakpoint === "min" && event.matches);
+    element.toggleAttribute("style", breakpoint === "max" && event.matches);
+    element.toggleAttribute("data-scroll", breakpoint === "max" && !event.matches);
+    element.toggleAttribute("data-scroll-sticky", breakpoint === "max" && !event.matches);
+  });
+
+  initScroll();
+});
+
 
 
 ;// CONCATENATED MODULE: ./src/js/scripts/scripts/remove-start.js
@@ -12951,7 +12998,7 @@ if (remove_start_button) {
   remove_start_button.addEventListener("click", () => {
     start.classList.add("start--remove");
     body.classList.add("start-animation");
-    initScroll();
+    // initScroll();
 
     setTimeout(() => {
       start.remove();
@@ -12959,7 +13006,7 @@ if (remove_start_button) {
   });
 } else {
   body.classList.add("start-animation");
-  initScroll();
+  // initScroll();
 }
 
 ;// CONCATENATED MODULE: ./src/js/scripts/scripts/products.js
@@ -13030,8 +13077,8 @@ if (productsTextsBlock) {
 
 
 ;// CONCATENATED MODULE: ./src/js/libraries/dot-lottie/animations/scroll.js
-const { __jr__ } = window;
-const { DotLottie } = __jr__;
+const { __jr__: scroll_jr_ } = window;
+const { DotLottie } = scroll_jr_;
 
 /** @type {HTMLCanvasElement} */
 const heroScroll = document.querySelector(".bottle__scroll");
@@ -13155,7 +13202,98 @@ if (factsSection) {
 ;// CONCATENATED MODULE: ./src/js/libraries/swiper/swiper.js
 
 
+;// CONCATENATED MODULE: ./src/js/libraries/locomotive-scroll/main.js
+
+
+/** @type {HTMLElement} */
+const main_bottle = document.querySelector(".bottle");
+/** @type {HTMLElement} */
+const bottleCap = document.querySelector(".bottle__cap");
+/** @type {HTMLElement} */
+const heroBackgroundImage = document.querySelector(".hero__background");
+/** @type {HTMLElement} */
+const heroBottomSection = document.querySelector(".hero-bottom");
+/** @type {HTMLElement} */
+const heroBottomSectionContainer = document.querySelector(".hero-bottom__container");
+/** @type {HTMLElement} */
+const heroBottomSectionContent = document.querySelector(".hero-bottom__content");
+/** @type {HTMLElement} */
+const agingSection = document.querySelector(".aging");
+/** @type {HTMLElement} */
+const agingSectionInner = document.querySelector(".aging__inner");
+/** @type {HTMLElement} */
+const agingSectionImage = document.querySelector(".aging__image");
+/** @type {HTMLElement} */
+const agingSectionImageCover = document.querySelector(".aging__cover");
+/** @type {HTMLElement} */
+const strengthSection = document.querySelector(".strength");
+/** @type {HTMLElement} */
+const strengthSectionBackgroundImage = document.querySelector(".strength__background");
+/** @type {HTMLElement} */
+const strengthTopSection = document.querySelector(".strength-top");
+
+const main_locomotive = new locomotive_scroll_esm({
+  el: document.querySelector(".wrapper"),
+  direction: "vertical",
+  smooth: true,
+  reloadOnContextChange: true,
+  repeat: true,
+  lerp: 0.05,
+  smartphone: {
+    smooth: true,
+    direction: "vertical",
+  },
+  tablet: {
+    smooth: true,
+    direction: "vertical",
+  },
+});
+
+main_locomotive.on("scroll", (event) => {
+  const { scroll } = event;
+
+  document.body.classList.toggle("scrolled", scroll.y > 0);
+
+  setProperty(main_bottle, "--bottle-rotate", strengthSection, 0, 86);
+  setProperty(main_bottle, "--bottle-translate-x", strengthSection, 0, 66);
+  setProperty(main_bottle, "--bottle-height", strengthSection, 937, 1157);
+  setProperty(bottleCap, "--bottle-cap-opacity", strengthSection, 1, 0);
+  setProperty(bottleCap, "--bottle-cap-translate-y", strengthSection, 0, -200);
+  setProperty(heroBackgroundImage, "--hero-background-image-blur", heroBottomSection, 0, 40);
+  setProperty(heroBottomSectionContent, "--hero-bottom-content", heroBottomSection, 50, 0);
+  setProperty(heroBottomSectionContainer, "--hero-bottom-container", agingSection, 0, -25);
+  setProperty(agingSectionInner, "--aging-inner-opacity", strengthSection, 1, 0);
+  setProperty(agingSectionImage, "--aging-image-opacity", agingSection, 0, 1);
+  setProperty(agingSectionImageCover, "--aging-image-cover-translate-x", agingSection, 0, -100);
+  setProperty(strengthSectionBackgroundImage, "--strength-background-opacity", strengthSection, 0, 1);
+  setProperty(strengthSectionBackgroundImage, "--strength-background-translate-y", strengthSection, 25, 0);
+  setProperty(strengthTopSection, "--strength-top-opacity", strengthSection, 0, 1);
+  setProperty(strengthTopSection, "--strength-top-translate-y", strengthSection, 100, 0);
+
+  if (strengthSection.getBoundingClientRect().top > innerHeight) {
+    setProperty(main_bottle, "--bottle-translate-y", heroBottomSection, 61, 0);
+    setProperty(agingSectionInner, "--aging-inner-translate-y", agingSection, 25, 0);
+  } else {
+    setProperty(main_bottle, "--bottle-translate-y", strengthSection, 0, -28);
+    setProperty(agingSectionInner, "--aging-inner-translate-y", strengthSection, 0, -25);
+  }
+
+});
+
+function setProperty(element, property, observer, start, end) {
+  const { top } = observer.getBoundingClientRect();
+
+  element.style.setProperty(property, calcValueRange(start, end, (innerHeight - top) / innerHeight));
+}
+
+function calcValueRange(start, end, progress) {
+  const calc = start + (progress * (end - start));
+
+  return start < end ? (calc < start ? start : calc > end ? end : calc) : (calc > start ? start : calc < end ? end : calc);
+}
+
 ;// CONCATENATED MODULE: ./src/js/libraries/libraries.js
+
 
 
 
