@@ -13032,6 +13032,8 @@ const agingSectionImage = document.querySelector(".aging__image");
 /** @type {HTMLElement} */
 const agingSectionImageCover = document.querySelector(".aging__cover");
 /** @type {HTMLElement} */
+const agingSectionContent = document.querySelector(".aging__content");
+/** @type {HTMLElement} */
 const glass = document.querySelector(".glass");
 /** @type {HTMLElement} */
 const glassWhiskey = document.querySelector(".glass__whiskey");
@@ -13088,7 +13090,7 @@ function desktopObserver() {
   setProperty(strengthTopSection, "--strength-top-opacity", strengthSection, 0, 1);
   setProperty(strengthTopSection, "--strength-top-translate-y", strengthSection, 100, 0);
 
-  if (strengthSection.getBoundingClientRect().top > innerHeight) {
+  if (strengthSection?.getBoundingClientRect().top > innerHeight) {
     setProperty(bottle, "--bottle-translate-y", heroBottomSection, 61, 0);
     setProperty(agingSectionInner, "--aging-inner-translate-y", agingSection, 25, 0);
   } else {
@@ -13096,11 +13098,11 @@ function desktopObserver() {
     setProperty(agingSectionInner, "--aging-inner-translate-y", strengthSection, 0, -100);
   }
 
-  if (strengthBottomSection.getBoundingClientRect().top < innerHeight) {
+  if (strengthBottomSection?.getBoundingClientRect().top < innerHeight) {
     setProperty(bottle, "--bottle-translate-y", strengthBottomSection, -25, -200);
   }
 
-  if (agingSection.getBoundingClientRect().top > innerHeight) {
+  if (agingSection?.getBoundingClientRect().top > innerHeight) {
     setProperty(heroBottomSectionContent, "--hero-bottom-content", heroBottomSection, 50, 0);
   } else {
     setProperty(heroBottomSectionContent, "--hero-bottom-content", agingSection, 0, -50);
@@ -13109,29 +13111,50 @@ function desktopObserver() {
 
 function mobileObserver() {
   setProperty(bottle, "--bottle-height", heroCenterSection, 1024, 900);
-  setProperty(bottle, "--bottle-opacity", heroBottomSection, 1, 0.2);
   setProperty(heroBackgroundImage, "--hero-background-image-blur", heroCenterSection, 0, 30);
   setProperty(heroBackgroundImage, "--hero-background-image-translate-y", heroCenterSection, 0, -25);
   setProperty(heroImage, "--hero-image-translate-y", heroCenterSection, 100, 0);
   setProperty(heroBottomSectionContent, "--hero-bottom-content", heroBottomSection, -20, 0);
 
-  if (heroBottomSection.getBoundingClientRect().top > innerHeight) {
+  if (heroBottomSection?.getBoundingClientRect().top > innerHeight) {
     setProperty(bottle, "--bottle-left", heroCenterSection, 50, 32 / 720 * innerWidth * 100 / innerWidth);
     setProperty(bottle, "--bottle-translate-y", heroCenterSection, 66, -15);
     setProperty(bottle, "--bottle-translate-x", heroCenterSection, 0, -50);
-  } else {
+  } else if (agingSection?.getBoundingClientRect().top > innerHeight) {
     setProperty(bottle, "--bottle-left", heroBottomSection, 32 / 720 * innerWidth * 100 / innerWidth, 50);
     setProperty(bottle, "--bottle-translate-y", heroBottomSection, -15, 0);
     setProperty(bottle, "--bottle-translate-x", heroBottomSection, -50, 0);
+    setProperty(bottle, "--bottle-opacity", heroBottomSection, 1, 0.2);
+  } else if (agingSectionContent?.getBoundingClientRect().top > innerHeight) {
+    setProperty(bottle, "--bottle-left", agingSection, 50, 100 - 32 / 720 * innerWidth * 100 / innerWidth);
+    setProperty(bottle, "--bottle-translate-x", agingSection, 0, -50 + 100 + 32 / 720 * innerWidth * 100 / innerWidth);
+    setProperty(bottle, "--bottle-opacity", agingSection, 0.2, 1);
+  } else {
+    setProperty(bottle, "--bottle-left", agingSectionContent, 100 - 32 / 720 * innerWidth * 100 / innerWidth, 50);
+    setProperty(bottle, "--bottle-translate-x", agingSectionContent, -50 + 100 + 32 / 720 * innerWidth * 100 / innerWidth, 0);
+    setProperty(bottle, "--bottle-opacity", agingSectionContent, 1, 0.2);
   }
 }
 
+/**
+ * @param {HTMLElement} element
+ * @param {string} property
+ * @param {HTMLElement} observer
+ * @param {number} start
+ * @param {number} end
+ */
 function setProperty(element, property, observer, start, end) {
-  const { top } = observer?.getBoundingClientRect();
+  const top = observer?.getBoundingClientRect().top;
 
   element?.style.setProperty(property, calcValueRange(start, end, (innerHeight - top) / innerHeight));
 }
 
+/**
+ * @param {number} start
+ * @param {number} end
+ * @param {number} progress
+ * @returns {number}
+ */
 function calcValueRange(start, end, progress) {
   const calc = start + (progress * (end - start));
 

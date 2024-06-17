@@ -1922,20 +1922,13 @@ body:has(.strength--move) .bottle__jet {
 .aging__inner {
   display: grid;
   align-items: center;
-  row-gap: 31.8055555556vw;
   min-block-size: 100vh;
   opacity: var(--aging-inner-opacity, 1);
-  transform: translateY(calc(var(--aging-inner-translate-y, -25) * 1vh));
 }
 
 .aging__image {
   block-size: 100%;
   font-size: 0;
-}
-
-.aging__image > picture img,
-.aging__image > img {
-  opacity: var(--aging-image-opacity, 0);
 }
 
 .aging__cover {
@@ -3467,6 +3460,12 @@ body:has(.strength--move) .bottle__jet {
 
   .aging__inner {
     grid-template-columns: 1.1927083333fr 0.8072916667fr;
+    transform: translateY(calc(var(--aging-inner-translate-y, -25) * 1vh));
+  }
+
+  .aging__image > picture img,
+  .aging__image > img {
+    opacity: var(--aging-image-opacity, 0);
   }
 
   .aging__content {
@@ -4088,8 +4087,12 @@ body:has(.strength--move) .bottle__jet {
     transform: translateY(calc(var(--hero-background-image-translate-y, 0) * 1%));
   }
 
+  .aging__inner {
+    padding-block-start: 20.8333333333vw;
+  }
+
   .aging__image {
-    min-block-size: 100vh;
+    min-block-size: 80vh;
   }
 
   .aging__cover {
@@ -4098,6 +4101,7 @@ body:has(.strength--move) .bottle__jet {
 
   .aging__content {
     min-block-size: 100vh;
+    padding-block-start: 20.8333333333vw;
   }
 
   .strength-top__inner {
