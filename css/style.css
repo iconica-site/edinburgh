@@ -1836,6 +1836,7 @@ body:has(.strength--move) .bottle__jet {
   font-weight: 300;
   font-size: 8.3333333333vw;
   color: #fff;
+  line-height: 55px;
 }
 
 .hero-bottom__text {
