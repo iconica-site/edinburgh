@@ -1591,27 +1591,15 @@ body:has(.start:not(.start--remove)) {
   position: fixed;
   isolation: isolate;
   inset-block-start: 50%;
-  inset-inline-start: 50%;
+  inset-inline-start: calc(var(--bottle-left, 50) * 1%);
   z-index: 500;
-  block-size: calc(var(--bottle-height, 937) / 1080 * 100vmin);
+  block-size: calc(var(--bottle-height, 1024) / 1280 * 100vmax);
   aspect-ratio: 251/937;
-  transform: translate(calc(-50% - var(--bottle-translate-x, 0) * 1%), calc(-50% + var(--bottle-translate-y, 61) * 1%)) rotate(calc(var(--bottle-rotate, 0) * 1deg));
+  opacity: var(--bottle-opacity);
+  transform: translate(calc(-50% - var(--bottle-translate-x, 0) * 1%), calc(-50% + var(--bottle-translate-y, 66) * 1%)) rotate(calc(var(--bottle-rotate, 0) * 1deg));
   overflow: visible;
   will-change: transform;
   pointer-events: none;
-}
-
-body:not(.scrolled) .bottle {
-  transition-property: inset-block-start, block-size, transform, translate;
-  transition-duration: 1s;
-  transition-delay: 0.3s;
-}
-
-body:not(.start-animation) .bottle,
-body:not(.init) .bottle {
-  opacity: 0;
-  visibility: hidden;
-  transform: translate(-50%, 100vh);
 }
 
 .bottle img {
@@ -1621,16 +1609,16 @@ body:not(.init) .bottle {
 
 .bottle__scroll {
   position: absolute;
-  inset-block-start: 33.3333333333vmin;
+  inset-block-start: 38.4204909285%;
   inset-inline-start: 50%;
   z-index: 1;
-  inline-size: 7.6851851852vmin;
+  inline-size: 33.0677290837%;
   aspect-ratio: 1/1;
   transform: translateX(-50%);
   pointer-events: none;
 }
 
-body.start-animation:has(.hero-top:not(.active-section)) .bottle__scroll {
+body.scrolled .bottle__scroll {
   display: none;
 }
 
@@ -1751,7 +1739,6 @@ body:has(.strength--move) .bottle__jet {
 .hero__background > img {
   filter: blur(calc(var(--hero-background-image-blur) * 1px));
   transform: translateZ(0, 0, 0);
-  will-change: transform;
 }
 
 .hero__image {
@@ -1761,13 +1748,8 @@ body:has(.strength--move) .bottle__jet {
   z-index: -1;
   inline-size: 100%;
   aspect-ratio: 720/819;
+  transform: translateY(calc(var(--hero-image-translate-y, 100) * 1%));
   overflow: visible;
-  transition-property: transform;
-  transition-duration: 1s;
-}
-
-.hero:has(.hero-bottom.prev-section) .hero__image {
-  transform: translateY(-25vh);
 }
 
 .hero__image img {
@@ -1787,6 +1769,7 @@ body:has(.strength--move) .bottle__jet {
   transform: scale(0);
   transform-origin: bottom;
   animation: smoke 10s linear forwards infinite;
+  will-change: transform, opacity;
 }
 
 @keyframes smoke {
@@ -1837,14 +1820,6 @@ body:has(.strength--move) .bottle__jet {
   line-height: 1.35;
   text-align: center;
   color: #000;
-  transition-property: opacity, transform;
-  transition-duration: 1s;
-}
-
-body:not(.start-animation) .hero-top__text,
-body:not(.init) .hero-top__text {
-  opacity: 0;
-  transform: translateY(50%);
 }
 
 .hero-center {
@@ -1864,7 +1839,7 @@ body:not(.init) .hero-top__text {
 }
 
 .hero-bottom__content {
-  transform: translateY(calc(var(--hero-bottom-content, 50) * 1%));
+  transform: translateY(calc(var(--hero-bottom-content, -20) * 1%));
 }
 
 .hero-bottom__content > *:last-child {
@@ -1883,6 +1858,7 @@ body:not(.init) .hero-top__text {
   margin-block-end: 8.0555555556vw;
   font-weight: 300;
   font-size: 4.4444444444vw;
+  line-height: 1.2;
 }
 
 .combination__list {
@@ -1913,6 +1889,7 @@ body:not(.init) .hero-top__text {
   min-inline-size: 30.5555555556vw;
   min-block-size: 25vw;
   font-size: 4.4444444444vw;
+  line-height: 1.2;
   color: #fff;
 }
 
@@ -1938,6 +1915,7 @@ body:not(.init) .hero-top__text {
 
 .combination-item__label {
   font-size: 4.4444444444vw;
+  line-height: 1.2;
   color: #666;
 }
 
@@ -2185,14 +2163,6 @@ body:not(.init) .hero-top__text {
   inline-size: 41.8055555556vw;
   aspect-ratio: 332/399;
   font-size: 0;
-  transition-property: inset-inline-start, inset-block-start, opacity;
-  transition-duration: 1s;
-}
-
-.strength:has(.strength-bottom.prev-section) .glass {
-  inset-inline-start: 0;
-  inset-block-start: -100%;
-  opacity: 0;
 }
 
 .glass img {
@@ -2216,15 +2186,7 @@ body:not(.init) .hero-top__text {
   inset-inline-start: 8.4668674699%;
   z-index: 1;
   inline-size: 83.1325301205%;
-  block-size: 10.5263157895%;
-  transition-property: block-size;
-  transition-duration: 1.5s;
-}
-
-.active-section .glass__whiskey,
-.prev-section .glass__whiskey {
-  block-size: 39.0977443609%;
-  transition-delay: 0.5s;
+  block-size: calc(var(--glass-whiskey-fill, 42) / 399 * 100%);
 }
 
 .prev-section .glass__whiskey {
@@ -3386,9 +3348,33 @@ body:not(.init) .hero-top__text {
     margin-block-start: 3.75vw;
   }
 
+  .bottle {
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    block-size: calc(var(--bottle-height, 937) / 1080 * 100vmin);
+    transform: translate(calc(-50% - var(--bottle-translate-x, 0) * 1%), calc(-50% + var(--bottle-translate-y, 61) * 1%)) rotate(calc(var(--bottle-rotate, 0) * 1deg));
+  }
+
+  body:not(.scrolled) .bottle {
+    transition-property: inset-block-start, block-size, transform, translate;
+    transition-duration: 1s;
+    transition-delay: 0.3s;
+  }
+
+  body:not(.start-animation) .bottle,
+  body:not(.init) .bottle {
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 100vh);
+  }
+
   .hero__image {
     inline-size: 67.7734375vw;
     aspect-ratio: 1203/907;
+  }
+
+  .hero__image {
+    transform: translateY(calc(var(--hero-image-translate-y, 0) * 1%));
   }
 
   .hero__smoke {
@@ -3409,6 +3395,15 @@ body:not(.init) .hero-top__text {
     max-inline-size: max(42.3958333333vw, 610px);
     margin-block-start: max(4.7916666667vw, 69px);
     font-size: max(2.0833333333vw, 30px);
+    transition-property: opacity, transform;
+    transition-duration: 1s;
+    will-change: opacity, transform;
+  }
+
+  body:not(.start-animation) .hero-top__text,
+  body:not(.init) .hero-top__text {
+    opacity: 0;
+    transform: translateY(50%);
   }
 
   .hero-center {
@@ -3421,6 +3416,7 @@ body:not(.init) .hero-top__text {
 
   .hero-bottom__content {
     max-inline-size: max(25vw, 360px);
+    transform: translateY(calc(var(--hero-bottom-content, 50) * 1%));
   }
 
   .hero-bottom__title {
@@ -3541,14 +3537,9 @@ body:not(.init) .hero-top__text {
   }
 
   .glass {
-    inset-block-start: calc(50% - 61px);
-    inset-inline-start: max(50% + 5.78125vw, 50% + 83px);
+    inset-block-start: 44.7210300429%;
+    inset-inline-start: calc(var(--glass-left, 1070) / 1920 * 100%);
     inline-size: max(17.2916666667vw, 249px);
-  }
-
-  .prev-section .glass {
-    inset-inline-start: min(50% - 25.5208333333vw, 50% - 386px);
-    transition-duration: 1s;
   }
 
   .quote__inner {
@@ -3899,6 +3890,7 @@ body:not(.init) .hero-top__text {
   .hero__background > img {
     transition-property: transform;
     transition-duration: 1s;
+    will-change: transform;
   }
 
   body:not(.start-animation) .hero__background > picture img,
@@ -4077,6 +4069,10 @@ body:not(.init) .hero-top__text {
     justify-content: center;
   }
 
+  .bottle__scroll {
+    display: none;
+  }
+
   .hero__main {
     position: relative;
     isolation: isolate;
@@ -4085,6 +4081,11 @@ body:not(.init) .hero-top__text {
   .hero__background {
     inset-block: 0 auto;
     block-size: 100vh;
+  }
+
+  .hero__background > picture img,
+  .hero__background > img {
+    transform: translateY(calc(var(--hero-background-image-translate-y, 0) * 1%));
   }
 
   .aging__image {
