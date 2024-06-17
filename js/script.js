@@ -12767,8 +12767,251 @@ window.addEventListener("load", (event) => {
   document.body.classList.add("init");
 });
 
+;// CONCATENATED MODULE: ./src/js/libraries/locomotive-scroll/main.js
+
+
+function initScroll() {
+  const MIN_769_PX = matchMedia("(min-width: 768.1px)");
+  /** @type {NodeListOf<HTMLElement>} */
+  const fixedElements = document.querySelectorAll("[data-scroll-target]");
+
+  fixedElements.forEach(element => {
+    const { dataset } = element;
+    /** @type { {breakpoint: "min" | "max" | "always"} } */
+    const { breakpoint } = dataset;
+
+    element.toggleAttribute("data-scroll", breakpoint === "min" && MIN_769_PX.matches);
+    element.toggleAttribute("data-scroll-sticky", breakpoint === "min" && MIN_769_PX.matches);
+    element.toggleAttribute("data-scroll", breakpoint === "max" && !MIN_769_PX.matches);
+    element.toggleAttribute("data-scroll-sticky", breakpoint === "max" && !MIN_769_PX.matches);
+    element.toggleAttribute("data-scroll", breakpoint === "always");
+    element.toggleAttribute("data-scroll-sticky", breakpoint === "always");
+  });
+
+  /** @type {HTMLElement} */
+  const bottle = document.querySelector(".bottle");
+  /** @type {HTMLElement} */
+  const bottleCap = document.querySelector(".bottle__cap");
+  /** @type {HTMLElement} */
+  const heroBackgroundImage = document.querySelector(".hero__background");
+  /** @type {HTMLElement} */
+  const heroImage = document.querySelector(".hero__image");
+  /** @type {HTMLElement} */
+  const heroCenterSection = document.querySelector(".hero-center");
+  /** @type {HTMLElement} */
+  const heroBottomSection = document.querySelector(".hero-bottom");
+  /** @type {HTMLElement} */
+  const heroBottomSectionContainer = document.querySelector(".hero-bottom__container");
+  /** @type {HTMLElement} */
+  const heroBottomSectionContent = document.querySelector(".hero-bottom__content");
+  /** @type {HTMLElement} */
+  const agingSection = document.querySelector(".aging");
+  /** @type {HTMLElement} */
+  const agingSectionInner = document.querySelector(".aging__inner");
+  /** @type {HTMLElement} */
+  const agingSectionImage = document.querySelector(".aging__image");
+  /** @type {HTMLElement} */
+  const agingSectionImageCover = document.querySelector(".aging__cover");
+  /** @type {HTMLElement} */
+  const agingSectionContent = document.querySelector(".aging__content");
+  /** @type {HTMLElement} */
+  const glass = document.querySelector(".glass");
+  /** @type {HTMLElement} */
+  const glassWhiskey = document.querySelector(".glass__whiskey");
+  /** @type {HTMLElement} */
+  const strengthSection = document.querySelector(".strength");
+  /** @type {HTMLElement} */
+  const strengthSectionBackgroundImage = document.querySelector(".strength__background");
+  /** @type {HTMLElement} */
+  const strengthTopSection = document.querySelector(".strength-top");
+  /** @type {HTMLElement} */
+  const strengthBottomSection = document.querySelector(".strength-bottom");
+  /** @type {HTMLElement} */
+  const strengthBottomSectionText = document.querySelector(".strength-right");
+  /** @type {HTMLElement} */
+  const quoteSection = document.querySelector(".quote");
+  /** @type {HTMLElement} */
+  const quoteSectionInner = document.querySelector(".quote__inner");
+  /** @type {HTMLElement} */
+  const quoteSectionImage = document.querySelector(".quote__image");
+  /** @type {HTMLElement} */
+  const productsSection = document.querySelector(".products");
+  /** @type {HTMLElement} */
+  const productsSectionBlock = document.querySelector(".products__block");
+  /** @type {HTMLElement} */
+  const productsSectionBackgroundImage = document.querySelector(".products-visual__background");
+  /** @type {HTMLElement} */
+  const productsSectionContent = document.querySelector(".products-content");
+  /** @type {HTMLElement} */
+  const factsSection = document.querySelector(".facts");
+  const footer = document.querySelector(".footer");
+  const footerBackground = document.querySelector(".footer-top__background");
+  const footerWhiskey = document.querySelector(".footer-top__whiskey");
+  const footerShine = document.querySelector(".footer-top__shine");
+
+  const locomotive = new locomotive_scroll_esm({
+    el: document.querySelector(".wrapper"),
+    direction: "vertical",
+    smooth: true,
+    reloadOnContextChange: true,
+    repeat: true,
+    lerp: 0.05,
+    smartphone: {
+      smooth: true,
+      direction: "vertical",
+    },
+    tablet: {
+      smooth: true,
+      direction: "vertical",
+    },
+  });
+
+  locomotive.on("scroll", (event) => {
+    const { scroll } = event;
+
+    document.body.classList.toggle("scrolled", scroll.y > 0);
+
+    strengthSection?.classList.toggle("strength--fill", strengthSection.getBoundingClientRect().top <= 0);
+    strengthSection?.classList.toggle("strength--ices", strengthBottomSection.getBoundingClientRect().top <= 0);
+
+    MIN_769_PX.matches ? desktopObserver() : mobileObserver();
+  });
+
+  function desktopObserver() {
+    setProperty(bottle, "--bottle-rotate", strengthSection, 0, 86);
+    setProperty(bottle, "--bottle-translate-x", strengthSection, 0, 100);
+    setProperty(bottle, "--bottle-height", strengthSection, 937, 1157);
+    setProperty(bottleCap, "--bottle-cap-opacity", strengthSection, 1, 0);
+    setProperty(bottleCap, "--bottle-cap-translate-y", strengthSection, 0, -200);
+    setProperty(heroBackgroundImage, "--hero-background-image-blur", heroBottomSection, 0, 40);
+    setProperty(heroImage, "--hero-image-translate-y", agingSection, 0, -50);
+    setProperty(heroBottomSectionContainer, "--hero-bottom-container", agingSection, 0, -25);
+    setProperty(agingSectionInner, "--aging-inner-opacity", strengthSection, 1, 0);
+    setProperty(agingSectionImage, "--aging-image-opacity", agingSection, 0, 1);
+    setProperty(agingSectionImageCover, "--aging-image-cover-translate-x", agingSection, 0, -100);
+    setProperty(glass, "--glass-left", strengthBottomSection, 1070, 445);
+    setProperty(glassWhiskey, "--glass-whiskey-fill", strengthTopSection, 42, 156);
+    setProperty(strengthSectionBackgroundImage, "--strength-background-translate-y", strengthSection, 25, 0);
+    setProperty(strengthSectionBackgroundImage, "--strength-background-translate-x", strengthBottomSection, 0, -50);
+    setProperty(strengthTopSection, "--strength-top-opacity", strengthSection, 0, 1);
+    setProperty(strengthTopSection, "--strength-top-translate-y", strengthSection, 100, 0);
+    setProperty(glass, "--glass-translate-x", quoteSection, 0, -100);
+    setProperty(glass, "--glass-translate-y", quoteSection, 0, -100);
+    setProperty(glass, "--glass-opacity", quoteSection, 1, 0);
+    setProperty(strengthBottomSectionText, "--strength-bottom-text-translate-y", quoteSection, 0, -50);
+    setProperty(strengthBottomSectionText, "--strength-bottom-text-opacity", quoteSection, 1, 0);
+    setProperty(footerBackground, "--footer-background-opacity", footer, 0, 1);
+    setProperty(footerBackground, "--footer-background-translate-x", footer, -25, 0);
+    setProperty(footerWhiskey, "--footer-whiskey-opacity", footer, 0, 1);
+    setProperty(footerWhiskey, "--footer-whiskey-translate-x", footer, 25, 0);
+    setProperty(footerShine, "--footer-shine-opacity", footer, 0, 1);
+    setProperty(footerShine, "--footer-shine-translate-x", footer, 50, 0);
+
+    if (strengthSection?.getBoundingClientRect().top > innerHeight) {
+      setProperty(bottle, "--bottle-translate-y", heroBottomSection, 61, 0);
+      setProperty(agingSectionInner, "--aging-inner-translate-y", agingSection, 25, 0);
+    } else {
+      setProperty(bottle, "--bottle-translate-y", strengthSection, 0, -15);
+      setProperty(agingSectionInner, "--aging-inner-translate-y", strengthSection, 0, -100);
+    }
+
+    if (strengthBottomSection?.getBoundingClientRect().top < innerHeight) {
+      setProperty(bottle, "--bottle-translate-y", strengthBottomSection, -15, -200);
+      setProperty(strengthSectionBackgroundImage, "--strength-background-opacity", strengthBottomSection, 1, 0);
+    } else {
+      setProperty(strengthSectionBackgroundImage, "--strength-background-opacity", strengthSection, 0, 1);
+    }
+
+    if (agingSection?.getBoundingClientRect().top > innerHeight) {
+      setProperty(heroBottomSectionContent, "--hero-bottom-content", heroBottomSection, 50, 0);
+    } else {
+      setProperty(heroBottomSectionContent, "--hero-bottom-content", agingSection, 0, -50);
+    }
+
+    if (productsSection?.getBoundingClientRect().top > innerHeight) {
+      setProperty(quoteSectionInner, "--quote-inner-translate-y", quoteSection, 100, 0);
+      setProperty(quoteSectionInner, "--quote-inner-opacity", quoteSection, 0, 1);
+      setProperty(quoteSectionImage, "--quote-image-translate-x", quoteSection, 50, 0);
+      setProperty(quoteSectionImage, "--quote-image-translate-y", quoteSection, 50, 0);
+      setProperty(quoteSectionImage, "--quote-image-opacity", quoteSection, 0, 1);
+    } else {
+      setProperty(quoteSectionInner, "--quote-inner-translate-y", productsSection, 0, -100);
+      setProperty(quoteSectionInner, "--quote-inner-opacity", productsSection, 1, 0);
+      setProperty(quoteSectionImage, "--quote-image-translate-x", productsSection, 0, 100);
+      setProperty(quoteSectionImage, "--quote-image-opacity", productsSection, 1, 0);
+      setProperty(quoteSectionImage, "--quote-image-scale", productsSection, 1, 1.5);
+    }
+
+    if (factsSection?.getBoundingClientRect().top > innerHeight) {
+      setProperty(productsSectionBlock, "--products-block-translate-y", productsSection, 25, 0);
+      setProperty(productsSectionBlock, "--products-block-opacity", productsSection, 0, 1);
+      setProperty(productsSectionBackgroundImage, "--products-background-translate-x", productsSection, -25, 0);
+      setProperty(productsSectionBackgroundImage, "--products-background-opacity", productsSection, 0, 1);
+      setProperty(productsSectionContent, "--products-content-translate-x", productsSection, 25, 0);
+      setProperty(productsSectionContent, "--products-content-opacity", productsSection, 0, 1);
+    } else {
+      setProperty(productsSectionBlock, "--products-block-translate-y", factsSection, 0, -25);
+      setProperty(productsSectionBlock, "--products-block-opacity", factsSection, 1, 0);
+    }
+  }
+
+  function mobileObserver() {
+    setProperty(bottle, "--bottle-height", heroCenterSection, 1024, 900);
+    setProperty(heroBackgroundImage, "--hero-background-image-blur", heroCenterSection, 0, 30);
+    setProperty(heroBackgroundImage, "--hero-background-image-translate-y", heroCenterSection, 0, -25);
+    setProperty(heroImage, "--hero-image-translate-y", heroCenterSection, 100, 0);
+    setProperty(heroBottomSectionContent, "--hero-bottom-content", heroBottomSection, -20, 0);
+
+    if (heroBottomSection?.getBoundingClientRect().top > innerHeight) {
+      setProperty(bottle, "--bottle-left", heroCenterSection, 50, 32 / 720 * innerWidth * 100 / innerWidth);
+      setProperty(bottle, "--bottle-translate-y", heroCenterSection, 66, -15);
+      setProperty(bottle, "--bottle-translate-x", heroCenterSection, 0, -50);
+    } else if (agingSection?.getBoundingClientRect().top > innerHeight) {
+      setProperty(bottle, "--bottle-left", heroBottomSection, 32 / 720 * innerWidth * 100 / innerWidth, 50);
+      setProperty(bottle, "--bottle-translate-y", heroBottomSection, -15, 0);
+      setProperty(bottle, "--bottle-translate-x", heroBottomSection, -50, 0);
+      setProperty(bottle, "--bottle-opacity", heroBottomSection, 1, 0.2);
+    } else if (agingSectionContent?.getBoundingClientRect().top > innerHeight) {
+      setProperty(bottle, "--bottle-left", agingSection, 50, 100 - 32 / 720 * innerWidth * 100 / innerWidth);
+      setProperty(bottle, "--bottle-translate-x", agingSection, 0, -50 + 100 + 32 / 720 * innerWidth * 100 / innerWidth);
+      setProperty(bottle, "--bottle-opacity", agingSection, 0.2, 1);
+    } else {
+      setProperty(bottle, "--bottle-left", agingSectionContent, 100 - 32 / 720 * innerWidth * 100 / innerWidth, 50);
+      setProperty(bottle, "--bottle-translate-x", agingSectionContent, -50 + 100 + 32 / 720 * innerWidth * 100 / innerWidth, 0);
+      setProperty(bottle, "--bottle-opacity", agingSectionContent, 1, 0.2);
+    }
+  }
+
+  /**
+   * @param {HTMLElement} element
+   * @param {string} property
+   * @param {HTMLElement} observer
+   * @param {number} start
+   * @param {number} end
+   */
+  function setProperty(element, property, observer, start, end) {
+    const top = observer?.getBoundingClientRect().top;
+
+    element?.style.setProperty(property, calcValueRange(start, end, (innerHeight - top) / innerHeight));
+  }
+
+  /**
+   * @param {number} start
+   * @param {number} end
+   * @param {number} progress
+   * @returns {number}
+   */
+  function calcValueRange(start, end, progress) {
+    const calc = start + (progress * (end - start));
+
+    return start < end ? (calc < start ? start : calc > end ? end : calc) : (calc > start ? start : calc < end ? end : calc);
+  }
+}
+
+
+
 ;// CONCATENATED MODULE: ./src/js/scripts/scripts/remove-start.js
-// import { initScroll } from "../../libraries/locomotive-scroll/locomotive-scroll.js";
+
 
 /** @type {HTMLElement} */
 const start = document.querySelector(".start");
@@ -12781,7 +13024,7 @@ if (remove_start_button) {
   remove_start_button.addEventListener("click", () => {
     start.classList.add("start--remove");
     body.classList.add("start-animation");
-    // initScroll();
+    initScroll();
 
     setTimeout(() => {
       start.remove();
@@ -12789,7 +13032,7 @@ if (remove_start_button) {
   });
 } else {
   body.classList.add("start-animation");
-  // initScroll();
+  initScroll();
 }
 
 ;// CONCATENATED MODULE: ./src/js/scripts/scripts/products.js
@@ -12988,245 +13231,6 @@ if (factsSection) {
 
 ;// CONCATENATED MODULE: ./src/js/libraries/swiper/swiper.js
 
-
-;// CONCATENATED MODULE: ./src/js/libraries/locomotive-scroll/main.js
-
-
-const main_MIN_769_PX = matchMedia("(min-width: 768.1px)");
-/** @type {NodeListOf<HTMLElement>} */
-const fixedElements = document.querySelectorAll("[data-scroll-target]");
-
-fixedElements.forEach(element => {
-  const { dataset } = element;
-  /** @type { {breakpoint: "min" | "max" | "always"} } */
-  const { breakpoint } = dataset;
-
-  element.toggleAttribute("data-scroll", breakpoint === "min" && main_MIN_769_PX.matches);
-  element.toggleAttribute("data-scroll-sticky", breakpoint === "min" && main_MIN_769_PX.matches);
-  element.toggleAttribute("data-scroll", breakpoint === "max" && !main_MIN_769_PX.matches);
-  element.toggleAttribute("data-scroll-sticky", breakpoint === "max" && !main_MIN_769_PX.matches);
-  element.toggleAttribute("data-scroll", breakpoint === "always");
-  element.toggleAttribute("data-scroll-sticky", breakpoint === "always");
-});
-
-/** @type {HTMLElement} */
-const bottle = document.querySelector(".bottle");
-/** @type {HTMLElement} */
-const bottleCap = document.querySelector(".bottle__cap");
-/** @type {HTMLElement} */
-const heroBackgroundImage = document.querySelector(".hero__background");
-/** @type {HTMLElement} */
-const heroImage = document.querySelector(".hero__image");
-/** @type {HTMLElement} */
-const heroCenterSection = document.querySelector(".hero-center");
-/** @type {HTMLElement} */
-const heroBottomSection = document.querySelector(".hero-bottom");
-/** @type {HTMLElement} */
-const heroBottomSectionContainer = document.querySelector(".hero-bottom__container");
-/** @type {HTMLElement} */
-const heroBottomSectionContent = document.querySelector(".hero-bottom__content");
-/** @type {HTMLElement} */
-const agingSection = document.querySelector(".aging");
-/** @type {HTMLElement} */
-const agingSectionInner = document.querySelector(".aging__inner");
-/** @type {HTMLElement} */
-const agingSectionImage = document.querySelector(".aging__image");
-/** @type {HTMLElement} */
-const agingSectionImageCover = document.querySelector(".aging__cover");
-/** @type {HTMLElement} */
-const agingSectionContent = document.querySelector(".aging__content");
-/** @type {HTMLElement} */
-const glass = document.querySelector(".glass");
-/** @type {HTMLElement} */
-const glassWhiskey = document.querySelector(".glass__whiskey");
-/** @type {HTMLElement} */
-const strengthSection = document.querySelector(".strength");
-/** @type {HTMLElement} */
-const strengthSectionBackgroundImage = document.querySelector(".strength__background");
-/** @type {HTMLElement} */
-const strengthTopSection = document.querySelector(".strength-top");
-/** @type {HTMLElement} */
-const strengthBottomSection = document.querySelector(".strength-bottom");
-/** @type {HTMLElement} */
-const strengthBottomSectionText = document.querySelector(".strength-right");
-/** @type {HTMLElement} */
-const quoteSection = document.querySelector(".quote");
-/** @type {HTMLElement} */
-const quoteSectionInner = document.querySelector(".quote__inner");
-/** @type {HTMLElement} */
-const quoteSectionImage = document.querySelector(".quote__image");
-/** @type {HTMLElement} */
-const main_productsSection = document.querySelector(".products");
-/** @type {HTMLElement} */
-const productsSectionBlock = document.querySelector(".products__block");
-/** @type {HTMLElement} */
-const productsSectionBackgroundImage = document.querySelector(".products-visual__background");
-/** @type {HTMLElement} */
-const productsSectionContent = document.querySelector(".products-content");
-/** @type {HTMLElement} */
-const main_factsSection = document.querySelector(".facts");
-const footer = document.querySelector(".footer");
-const footerBackground = document.querySelector(".footer-top__background");
-const footerWhiskey = document.querySelector(".footer-top__whiskey");
-const footerShine = document.querySelector(".footer-top__shine");
-
-const locomotive = new locomotive_scroll_esm({
-  el: document.querySelector(".wrapper"),
-  direction: "vertical",
-  smooth: true,
-  reloadOnContextChange: true,
-  repeat: true,
-  lerp: 0.05,
-  smartphone: {
-    smooth: true,
-    direction: "vertical",
-  },
-  tablet: {
-    smooth: true,
-    direction: "vertical",
-  },
-});
-
-locomotive.on("scroll", (event) => {
-  const { scroll } = event;
-
-  document.body.classList.toggle("scrolled", scroll.y > 0);
-
-  strengthSection?.classList.toggle("strength--fill", strengthSection.getBoundingClientRect().top <= 0);
-  strengthSection?.classList.toggle("strength--ices", strengthBottomSection.getBoundingClientRect().top <= 0);
-
-  main_MIN_769_PX.matches ? desktopObserver() : mobileObserver();
-});
-
-function desktopObserver() {
-  setProperty(bottle, "--bottle-rotate", strengthSection, 0, 86);
-  setProperty(bottle, "--bottle-translate-x", strengthSection, 0, 100);
-  setProperty(bottle, "--bottle-height", strengthSection, 937, 1157);
-  setProperty(bottleCap, "--bottle-cap-opacity", strengthSection, 1, 0);
-  setProperty(bottleCap, "--bottle-cap-translate-y", strengthSection, 0, -200);
-  setProperty(heroBackgroundImage, "--hero-background-image-blur", heroBottomSection, 0, 40);
-  setProperty(heroImage, "--hero-image-translate-y", agingSection, 0, -50);
-  setProperty(heroBottomSectionContainer, "--hero-bottom-container", agingSection, 0, -25);
-  setProperty(agingSectionInner, "--aging-inner-opacity", strengthSection, 1, 0);
-  setProperty(agingSectionImage, "--aging-image-opacity", agingSection, 0, 1);
-  setProperty(agingSectionImageCover, "--aging-image-cover-translate-x", agingSection, 0, -100);
-  setProperty(glass, "--glass-left", strengthBottomSection, 1070, 445);
-  setProperty(glassWhiskey, "--glass-whiskey-fill", strengthTopSection, 42, 156);
-  setProperty(strengthSectionBackgroundImage, "--strength-background-translate-y", strengthSection, 25, 0);
-  setProperty(strengthSectionBackgroundImage, "--strength-background-translate-x", strengthBottomSection, 0, -50);
-  setProperty(strengthTopSection, "--strength-top-opacity", strengthSection, 0, 1);
-  setProperty(strengthTopSection, "--strength-top-translate-y", strengthSection, 100, 0);
-  setProperty(glass, "--glass-translate-x", quoteSection, 0, -100);
-  setProperty(glass, "--glass-translate-y", quoteSection, 0, -100);
-  setProperty(glass, "--glass-opacity", quoteSection, 1, 0);
-  setProperty(strengthBottomSectionText, "--strength-bottom-text-translate-y", quoteSection, 0, -50);
-  setProperty(strengthBottomSectionText, "--strength-bottom-text-opacity", quoteSection, 1, 0);
-  setProperty(footerBackground, "--footer-background-opacity", footer, 0, 1);
-  setProperty(footerBackground, "--footer-background-translate-x", footer, -25, 0);
-  setProperty(footerWhiskey, "--footer-whiskey-opacity", footer, 0, 1);
-  setProperty(footerWhiskey, "--footer-whiskey-translate-x", footer, 25, 0);
-  setProperty(footerShine, "--footer-shine-opacity", footer, 0, 1);
-  setProperty(footerShine, "--footer-shine-translate-x", footer, 50, 0);
-
-  if (strengthSection?.getBoundingClientRect().top > innerHeight) {
-    setProperty(bottle, "--bottle-translate-y", heroBottomSection, 61, 0);
-    setProperty(agingSectionInner, "--aging-inner-translate-y", agingSection, 25, 0);
-  } else {
-    setProperty(bottle, "--bottle-translate-y", strengthSection, 0, -15);
-    setProperty(agingSectionInner, "--aging-inner-translate-y", strengthSection, 0, -100);
-  }
-
-  if (strengthBottomSection?.getBoundingClientRect().top < innerHeight) {
-    setProperty(bottle, "--bottle-translate-y", strengthBottomSection, -15, -200);
-    setProperty(strengthSectionBackgroundImage, "--strength-background-opacity", strengthBottomSection, 1, 0);
-  } else {
-    setProperty(strengthSectionBackgroundImage, "--strength-background-opacity", strengthSection, 0, 1);
-  }
-
-  if (agingSection?.getBoundingClientRect().top > innerHeight) {
-    setProperty(heroBottomSectionContent, "--hero-bottom-content", heroBottomSection, 50, 0);
-  } else {
-    setProperty(heroBottomSectionContent, "--hero-bottom-content", agingSection, 0, -50);
-  }
-
-  if (main_productsSection?.getBoundingClientRect().top > innerHeight) {
-    setProperty(quoteSectionInner, "--quote-inner-translate-y", quoteSection, 100, 0);
-    setProperty(quoteSectionInner, "--quote-inner-opacity", quoteSection, 0, 1);
-    setProperty(quoteSectionImage, "--quote-image-translate-x", quoteSection, 50, 0);
-    setProperty(quoteSectionImage, "--quote-image-translate-y", quoteSection, 50, 0);
-    setProperty(quoteSectionImage, "--quote-image-opacity", quoteSection, 0, 1);
-  } else {
-    setProperty(quoteSectionInner, "--quote-inner-translate-y", main_productsSection, 0, -100);
-    setProperty(quoteSectionInner, "--quote-inner-opacity", main_productsSection, 1, 0);
-    setProperty(quoteSectionImage, "--quote-image-translate-x", main_productsSection, 0, 100);
-    setProperty(quoteSectionImage, "--quote-image-opacity", main_productsSection, 1, 0);
-    setProperty(quoteSectionImage, "--quote-image-scale", main_productsSection, 1, 1.5);
-  }
-
-  if (main_factsSection?.getBoundingClientRect().top > innerHeight) {
-    setProperty(productsSectionBlock, "--products-block-translate-y", main_productsSection, 25, 0);
-    setProperty(productsSectionBlock, "--products-block-opacity", main_productsSection, 0, 1);
-    setProperty(productsSectionBackgroundImage, "--products-background-translate-x", main_productsSection, -25, 0);
-    setProperty(productsSectionBackgroundImage, "--products-background-opacity", main_productsSection, 0, 1);
-    setProperty(productsSectionContent, "--products-content-translate-x", main_productsSection, 25, 0);
-    setProperty(productsSectionContent, "--products-content-opacity", main_productsSection, 0, 1);
-  } else {
-    setProperty(productsSectionBlock, "--products-block-translate-y", main_factsSection, 0, -25);
-    setProperty(productsSectionBlock, "--products-block-opacity", main_factsSection, 1, 0);
-  }
-}
-
-function mobileObserver() {
-  setProperty(bottle, "--bottle-height", heroCenterSection, 1024, 900);
-  setProperty(heroBackgroundImage, "--hero-background-image-blur", heroCenterSection, 0, 30);
-  setProperty(heroBackgroundImage, "--hero-background-image-translate-y", heroCenterSection, 0, -25);
-  setProperty(heroImage, "--hero-image-translate-y", heroCenterSection, 100, 0);
-  setProperty(heroBottomSectionContent, "--hero-bottom-content", heroBottomSection, -20, 0);
-
-  if (heroBottomSection?.getBoundingClientRect().top > innerHeight) {
-    setProperty(bottle, "--bottle-left", heroCenterSection, 50, 32 / 720 * innerWidth * 100 / innerWidth);
-    setProperty(bottle, "--bottle-translate-y", heroCenterSection, 66, -15);
-    setProperty(bottle, "--bottle-translate-x", heroCenterSection, 0, -50);
-  } else if (agingSection?.getBoundingClientRect().top > innerHeight) {
-    setProperty(bottle, "--bottle-left", heroBottomSection, 32 / 720 * innerWidth * 100 / innerWidth, 50);
-    setProperty(bottle, "--bottle-translate-y", heroBottomSection, -15, 0);
-    setProperty(bottle, "--bottle-translate-x", heroBottomSection, -50, 0);
-    setProperty(bottle, "--bottle-opacity", heroBottomSection, 1, 0.2);
-  } else if (agingSectionContent?.getBoundingClientRect().top > innerHeight) {
-    setProperty(bottle, "--bottle-left", agingSection, 50, 100 - 32 / 720 * innerWidth * 100 / innerWidth);
-    setProperty(bottle, "--bottle-translate-x", agingSection, 0, -50 + 100 + 32 / 720 * innerWidth * 100 / innerWidth);
-    setProperty(bottle, "--bottle-opacity", agingSection, 0.2, 1);
-  } else {
-    setProperty(bottle, "--bottle-left", agingSectionContent, 100 - 32 / 720 * innerWidth * 100 / innerWidth, 50);
-    setProperty(bottle, "--bottle-translate-x", agingSectionContent, -50 + 100 + 32 / 720 * innerWidth * 100 / innerWidth, 0);
-    setProperty(bottle, "--bottle-opacity", agingSectionContent, 1, 0.2);
-  }
-}
-
-/**
- * @param {HTMLElement} element
- * @param {string} property
- * @param {HTMLElement} observer
- * @param {number} start
- * @param {number} end
- */
-function setProperty(element, property, observer, start, end) {
-  const top = observer?.getBoundingClientRect().top;
-
-  element?.style.setProperty(property, calcValueRange(start, end, (innerHeight - top) / innerHeight));
-}
-
-/**
- * @param {number} start
- * @param {number} end
- * @param {number} progress
- * @returns {number}
- */
-function calcValueRange(start, end, progress) {
-  const calc = start + (progress * (end - start));
-
-  return start < end ? (calc < start ? start : calc > end ? end : calc) : (calc > start ? start : calc < end ? end : calc);
-}
 
 ;// CONCATENATED MODULE: ./src/js/libraries/libraries.js
 

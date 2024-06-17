@@ -1082,7 +1082,7 @@ body::after {
   display: flex;
   flex-direction: column;
   min-block-size: 100%;
-  overflow: clip;
+  overflow: hidden;
   transition-property: opacity, visibility;
   transition-duration: 1s;
   transition-timing-function: linear;
@@ -1090,7 +1090,7 @@ body::after {
 
 body:not(.init) .wrapper {
   opacity: 0 !important;
-  visibility: clip !important;
+  visibility: hidden !important;
 }
 
 body.start-animation .wrapper {
