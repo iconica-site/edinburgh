@@ -1093,8 +1093,7 @@ body.start-animation .wrapper {
 }
 
 .footer {
-  padding-block: 20.1388888889vw 13.3333333333vw;
-  min-block-size: 100vh;
+  padding-block: 20.1388888889vw 13.8888888889vw;
 }
 
 .footer__container > *:not(:last-child) {
@@ -1103,7 +1102,6 @@ body.start-animation .wrapper {
 
 .footer-top {
   position: relative;
-  overflow: hidden;
 }
 
 .footer-top__inner {
@@ -1136,12 +1134,11 @@ body.start-animation .wrapper {
 
 .footer-top__background {
   position: absolute;
-  inset: 0;
+  inset-block-start: 0;
+  inset-inline: 0;
   z-index: -1;
   font-size: 0;
   mix-blend-mode: lighten;
-  opacity: var(--footer-background-opacity, 0);
-  transform: translateX(calc(var(--footer-background-translate-x, -25%) * 1%));
 }
 
 .footer-top__whiskey {
@@ -1156,13 +1153,11 @@ body.start-animation .wrapper {
 
 .footer-top__shine {
   position: absolute;
-  inset-block-start: -29.8484848485%;
-  inset-inline-end: 8.5714285714%;
+  inset-block-start: -10.5292792793%;
+  inset-inline-end: 10.6944444444%;
   z-index: 1;
-  block-size: 54.8484848485%;
+  inline-size: 55.4166666667%;
   aspect-ratio: 363/362;
-  opacity: var(--footer-shine-opacity, 0);
-  transform: translateX(calc(var(--footer-shine-translate-x, 50%) * 1%));
 }
 
 .footer-top__shine img {
@@ -1204,6 +1199,10 @@ body.start-animation .wrapper {
 .button__icon svg {
   width: 100%;
   height: 100%;
+}
+
+.footer-bottom {
+  line-height: 1.2;
 }
 
 .footer-bottom__warning {
@@ -1578,6 +1577,12 @@ body:has(.start:not(.start--remove)) {
   overflow: visible;
   will-change: transform;
   pointer-events: none;
+}
+
+body:not(.start-animation) .bottle,
+body:not(.init) .bottle {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .end-bottle-animation .bottle {
@@ -2512,7 +2517,7 @@ body:has(.strength--move) .bottle__jet {
   margin-block-end: 0.6944444444vw;
   font-weight: 500;
   font-size: 3.3333333333vw;
-  line-height: 1;
+  line-height: 1.2;
   text-align: right;
   color: #fff;
 }
@@ -3168,19 +3173,8 @@ body:has(.strength--move) .bottle__jet {
     font-size: max(1.0416666667vw, 16px);
   }
 
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cfilter id='a' x='0' y='0'%3E%3CfeTurbulence baseFrequency='.65' numOctaves='3' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeBlend mode='screen'/%3E%3C/filter%3E%3Cpath d='M0 0h500v500H0z' filter='url(%23a)' opacity='.1'/%3E%3C/svg%3E");
-    background-size: 1000px 1000px;
-    background-repeat: repeat;
-    pointer-events: none;
-  }
-
   .footer {
-    padding-block: max(10.2604166667vw, 115px) max(1.8229166667vw, 26px);
+    padding-block: max(10.2604166667vw, 115px) max(3.6458333333vw, 50px);
   }
 
   .footer__container > *:not(:last-child) {
@@ -3213,8 +3207,22 @@ body:has(.strength--move) .bottle__jet {
     font-size: max(1.0416666667vw, 15px);
   }
 
+  .footer-top__background {
+    inset: 0;
+    opacity: var(--footer-background-opacity, 0);
+    transform: translateX(calc(var(--footer-background-translate-x, -25%) * 1%));
+  }
+
   .footer-top__whiskey {
     border-radius: max(2.6041666667vw, 38px);
+  }
+
+  .footer-top__shine {
+    inset-block-start: min(-29.8484848485%, -148px);
+    inset-inline-end: max(8.5714285714%, 81px);
+    opacity: var(--footer-shine-opacity, 0);
+    transform: translateX(calc(var(--footer-shine-translate-x, 50%) * 1%));
+    inline-size: max(28.7301587302%, 272px);
   }
 
   .button {
@@ -3301,8 +3309,6 @@ body:has(.strength--move) .bottle__jet {
 
   body:not(.start-animation) .bottle,
   body:not(.init) .bottle {
-    opacity: 0;
-    visibility: hidden;
     transform: translate(-50%, 100vh);
   }
 
@@ -3951,8 +3957,21 @@ body:has(.strength--move) .bottle__jet {
 }
 
 @media (max-width: 768px) {
+  .footer-top {
+    margin-inline: min(-4.4444444444vw, -16px);
+    padding-inline: max(4.4444444444vw, 16px);
+  }
+
   .footer-top__inner {
     margin-inline: min(-4.4444444444vw, -16px);
+  }
+
+  .footer-top__background {
+    block-size: 99.0373725934%;
+  }
+
+  .footer-top__whiskey {
+    display: none;
   }
 
   .footer-bottom__inner {
