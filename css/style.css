@@ -1062,17 +1062,6 @@ body {
   overflow: hidden;
 }
 
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cfilter id='a' x='0' y='0'%3E%3CfeTurbulence baseFrequency='.65' numOctaves='3' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeBlend mode='screen'/%3E%3C/filter%3E%3Cpath d='M0 0h500v500H0z' filter='url(%23a)' opacity='.1'/%3E%3C/svg%3E");
-  background-size: 1000px 1000px;
-  background-repeat: repeat;
-  pointer-events: none;
-}
-
 .scroll-lock body {
   overflow: clip;
 }
@@ -1131,8 +1120,10 @@ body.start-animation .wrapper {
 
 .footer-top__header {
   margin-block-end: 7.7777777778vw;
+  padding-inline-start: 1.9444444444vw;
   font-family: "TT Tsars A", serif;
   font-size: 8.3333333333vw;
+  line-height: 1.1;
   color: #f9f9f9;
 }
 
@@ -1510,6 +1501,7 @@ body:has(.start:not(.start--remove)) {
   -moz-column-gap: max(1.1979166667vw, 16px);
   column-gap: max(1.1979166667vw, 16px);
   font-family: "TT Tsars A", serif;
+  color: #fff;
 }
 
 .start__18 {
@@ -1517,6 +1509,7 @@ body:has(.start:not(.start--remove)) {
 }
 
 .start__text {
+  font-weight: 300;
   font-size: max(1.3020833333vw, 14px);
 }
 
@@ -1532,6 +1525,7 @@ body:has(.start:not(.start--remove)) {
   font-weight: 700;
   font-size: 16px;
   text-align: center;
+  color: #fff;
   border: 2px solid;
   border-radius: max(0.5208333333vw, 6px);
   will-change: color, background-color;
@@ -1580,10 +1574,17 @@ body:has(.start:not(.start--remove)) {
   block-size: calc(var(--bottle-height, 1024) / 1280 * 100vmax);
   aspect-ratio: 251/937;
   opacity: var(--bottle-opacity);
-  transform: translate(calc(-50% - var(--bottle-translate-x, 0) * 1%), calc(-50% + var(--bottle-translate-y, 66) * 1%)) rotate(calc(var(--bottle-rotate, 0) * 1deg));
+  transform: translate(calc(var(--bottle-translate-x, -50) * 1%), calc(var(--bottle-translate-y, 16) * 1%)) rotate(calc(var(--bottle-rotate, 0) * 1deg));
   overflow: visible;
   will-change: transform;
   pointer-events: none;
+}
+
+.end-bottle-animation .bottle {
+  opacity: 0;
+  visibility: hidden;
+  transition-property: opacity, visibility;
+  transition-duration: 1s;
 }
 
 .bottle img {
@@ -1835,8 +1836,8 @@ body:has(.strength--move) .bottle__jet {
   font-family: "TT Tsars A", serif;
   font-weight: 300;
   font-size: 8.3333333333vw;
+  line-height: 1.1;
   color: #fff;
-  line-height: 55px;
 }
 
 .hero-bottom__text {
@@ -1966,6 +1967,7 @@ body:has(.strength--move) .bottle__jet {
 .aging-title__text {
   font-weight: 300;
   font-size: 8.3333333333vw;
+  line-height: 1.1;
   color: #fff;
 }
 
@@ -2010,13 +2012,12 @@ body:has(.strength--move) .bottle__jet {
   inset-inline-start: 0;
   z-index: -2;
   inline-size: 100%;
-  block-size: 100vh;
   font-size: 0;
 }
 
-.strength__background img {
-  -o-object-position: 50% 100%;
-  object-position: 50% 100%;
+.end-bottle-animation .strength__background {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .strength-top {
@@ -2027,8 +2028,6 @@ body:has(.strength--move) .bottle__jet {
   display: flex;
   flex-direction: column;
   min-block-size: 100vh;
-  opacity: var(--strength-top-opacity, 0);
-  transform: translateY(calc(var(--strength-top-translate-y, 100) * 1%));
 }
 
 .strength-top__container {
@@ -2043,7 +2042,7 @@ body:has(.strength--move) .bottle__jet {
   justify-content: space-between;
   align-items: end;
   flex: 1 1 auto;
-  padding-block-end: 14.5833333333vw;
+  padding-block-end: 8.3333333333vw;
 }
 
 .strength-text {
@@ -2052,15 +2051,8 @@ body:has(.strength--move) .bottle__jet {
   font-family: "TT Tsars A", serif;
   font-weight: 300;
   font-size: 8.3333333333vw;
+  line-height: 1.1;
   color: #fff;
-  will-change: opacity, transform;
-  transition-property: opacity, transform;
-  transition-duration: 1s;
-}
-
-.prev-section .strength-text {
-  opacity: 0;
-  transform: translateY(-100vh);
 }
 
 .strength-text__icon {
@@ -2102,6 +2094,7 @@ body:has(.strength--move) .bottle__jet {
   font-family: "TT Tsars A", serif;
   font-weight: 700;
   font-size: 16.6666666667vw;
+  line-height: 1.1;
   color: #fff;
 }
 
@@ -2110,6 +2103,7 @@ body:has(.strength--move) .bottle__jet {
   font-family: "TT Tsars A", serif;
   font-weight: 300;
   font-size: 8.3333333333vw;
+  line-height: 1.1;
   color: #fff;
 }
 
@@ -2130,6 +2124,10 @@ body:has(.strength--move) .bottle__jet {
   font-size: 0;
   opacity: var(--glass-opacity);
   translate: calc(var(--glass-translate-x) * 1%) calc(var(--glass-translate-x) * 1vh);
+}
+
+.glass--fade {
+  opacity: 0.2;
 }
 
 .glass img {
@@ -2173,9 +2171,6 @@ body:has(.strength--move) .bottle__jet {
   transition-property: opacity;
   transition-duration: 0.5s;
   opacity: 1;
-}
-
-.strength--fill .glass__full {
   visibility: visible;
 }
 
@@ -2195,11 +2190,11 @@ body:has(.strength--move) .bottle__jet {
 }
 
 .strength--ices .glass__ices {
-  transition-duration: 0.5s;
   inset-block-start: -41.6040100251%;
   inset-inline-start: -103.9156626506%;
   opacity: 1;
   transform: scale(1);
+  transition-duration: 0.5s;
 }
 
 .glass-ices {
@@ -2226,9 +2221,9 @@ body:has(.strength--move) .bottle__jet {
 }
 
 .strength--ices .glass-ices__main {
-  transition-duration: 0.5s;
   opacity: 1;
   transform: scale(1);
+  transition-duration: 0.5s;
 }
 
 .glass-ices__right {
@@ -2246,11 +2241,11 @@ body:has(.strength--move) .bottle__jet {
 }
 
 .strength--ices .glass-ices__right {
-  transition-duration: 0.5s;
   inset-block-start: 28.2021151586%;
   inset-inline-end: 5.7926829268%;
   opacity: 1;
   transform: scale(1);
+  transition-duration: 0.5s;
 }
 
 .glass-ices__center {
@@ -2268,11 +2263,11 @@ body:has(.strength--move) .bottle__jet {
 }
 
 .strength--ices .glass-ices__center {
-  transition-duration: 0.5s;
   inset-block-start: 11.1633372503%;
   inset-inline-end: 31.0975609756%;
   opacity: 1;
   transform: scale(1);
+  transition-duration: 0.5s;
 }
 
 .glass-ices__small {
@@ -2290,10 +2285,10 @@ body:has(.strength--move) .bottle__jet {
 }
 
 .strength--ices .glass-ices__small {
-  transition-duration: 0.5s;
   inset-block-start: 17.508813161%;
   opacity: 1;
   transform: scale(1);
+  transition-duration: 0.5s;
 }
 
 .glass-ices__left {
@@ -2311,10 +2306,10 @@ body:has(.strength--move) .bottle__jet {
 }
 
 .strength--ices .glass-ices__left {
-  transition-duration: 0.5s;
   inset-block-start: 15.0411280846%;
   opacity: 1;
   transform: scale(1);
+  transition-duration: 0.5s;
 }
 
 .glass-ices__group {
@@ -2333,9 +2328,9 @@ body:has(.strength--move) .bottle__jet {
 }
 
 .strength--ices .glass-ices__group {
-  transition-duration: 0.5s;
   opacity: 1;
   transform: scale(1);
+  transition-duration: 0.5s;
 }
 
 .quote {
@@ -2345,12 +2340,8 @@ body:has(.strength--move) .bottle__jet {
   padding-block: max(3.4375vw, 49px);
 }
 
-.quote__inner {
-  opacity: var(--quote-inner-opacity, 0);
-  transform: translateY(calc(var(--quote-inner-translate-y, 100%) * 1%));
-}
-
 .quote__text {
+  font-weight: 300;
   font-family: "TT Tsars A", serif;
   font-size: 5.5555555556vw;
   line-height: 1.4;
@@ -2367,7 +2358,7 @@ body:has(.strength--move) .bottle__jet {
   position: absolute;
   display: block;
   inset-block-start: -0.4166666667vw;
-  inset-inline-end: 100%;
+  inset-inline-start: -3.8888888889vw;
   font-size: 11.5277777778vw;
   color: #595959;
 }
@@ -2453,8 +2444,6 @@ body:has(.strength--move) .bottle__jet {
 
 .quote__image {
   aspect-ratio: 720/953;
-  opacity: var(--quote-image-opacity, 0);
-  transform: translate(calc(var(--quote-image-translate-x, 50) * 1%), calc(var(--quote-image-translate-y, 50) * 1%)) scale(var(--quote-image-scale, 1));
 }
 
 .next-section .quote__image {
@@ -2476,8 +2465,6 @@ body:has(.strength--move) .bottle__jet {
   position: relative;
   isolation: isolate;
   min-block-size: 100vh;
-  opacity: var(--products-block-opacity, 0);
-  transform: translateY(calc(var(--products-block-translate-y, 25) * 1vh));
 }
 
 .products__container {
@@ -2504,8 +2491,11 @@ body:has(.strength--move) .bottle__jet {
   z-index: -1;
   inline-size: 100%;
   font-size: 0;
-  opacity: var(--products-background-opacity, 0);
-  transform: translateX(calc(var(--products-background-translate-x, -25) * 1%));
+}
+
+.products-visual__background img {
+  -o-object-position: 50% 0;
+  object-position: 50% 0;
 }
 
 .visual-buttons {
@@ -2667,6 +2657,7 @@ body:has(.strength--move) .bottle__jet {
   font-family: "TT Tsars A", serif;
   font-weight: 300;
   font-size: 19.4444444444vw;
+  line-height: 1.1;
 }
 
 .products-content__buttons {
@@ -2910,6 +2901,7 @@ body:has(.strength--move) .bottle__jet {
   font-weight: 300;
   font-family: "TT Tsars A", serif;
   font-size: 8.3333333333vw;
+  line-height: 1.1;
   color: #fff;
 }
 
@@ -3176,6 +3168,17 @@ body:has(.strength--move) .bottle__jet {
     font-size: max(1.0416666667vw, 16px);
   }
 
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cfilter id='a' x='0' y='0'%3E%3CfeTurbulence baseFrequency='.65' numOctaves='3' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeBlend mode='screen'/%3E%3C/filter%3E%3Cpath d='M0 0h500v500H0z' filter='url(%23a)' opacity='.1'/%3E%3C/svg%3E");
+    background-size: 1000px 1000px;
+    background-repeat: repeat;
+    pointer-events: none;
+  }
+
   .footer {
     padding-block: max(10.2604166667vw, 115px) max(1.8229166667vw, 26px);
   }
@@ -3200,6 +3203,7 @@ body:has(.strength--move) .bottle__jet {
 
   .footer-top__header {
     margin-block-end: max(1.8229166667vw, 27px);
+    padding-inline-start: max(0.4166666667vw, 6px);
     font-size: max(2.6041666667vw, 37px);
   }
 
@@ -3444,12 +3448,19 @@ body:has(.strength--move) .bottle__jet {
   }
 
   .strength__background {
+    block-size: max(60.6770833333vw, 842px);
     opacity: var(--strength-background-opacity, 0);
     translate: calc(var(--strength-background-translate-x, 0) * 1vw) calc(var(--strength-background-translate-y, 25) * 1vh);
   }
 
+  .strength-top {
+    min-block-size: max(60.6770833333vw, 842px);
+    opacity: var(--strength-top-opacity, 0);
+    transform: translateY(calc(var(--strength-top-translate-y, 100) * 1%));
+  }
+
   .strength-top__inner {
-    padding-block-end: max(14.5833333333vw, 210px);
+    padding-block-end: max(8.3333333333vw, 90px);
   }
 
   .strength-text {
@@ -3458,9 +3469,13 @@ body:has(.strength--move) .bottle__jet {
   }
 
   .strength-text__icon {
-    inset-block-start: max(-4.4270833333vw, -63px);
+    inset-block-start: max(-7vw, -90px);
     inset-inline-end: max(2.8125vw, 40px);
     inline-size: max(6.6666666667vw, 96px);
+  }
+
+  .strength-bottom__inner {
+    min-block-size: max(60.6770833333vw, 842px);
   }
 
   .strength-right {
@@ -3489,6 +3504,8 @@ body:has(.strength--move) .bottle__jet {
 
   .quote__inner {
     max-inline-size: max(30.7291666667vw, 440px);
+    opacity: var(--quote-inner-opacity, 0);
+    transform: translateY(calc(var(--quote-inner-translate-y, 100%) * 1%));
   }
 
   .quote__text {
@@ -3537,6 +3554,13 @@ body:has(.strength--move) .bottle__jet {
     inset-block: 0;
     inset-inline-end: 0;
     z-index: -1;
+    opacity: var(--quote-image-opacity, 0);
+    transform: translate(calc(var(--quote-image-translate-x, 50) * 1%), calc(var(--quote-image-translate-y, 50) * 1%)) scale(var(--quote-image-scale, 1));
+  }
+
+  .products__block {
+    opacity: var(--products-block-opacity, 0);
+    transform: translateY(calc(var(--products-block-translate-y, 25) * 1vh));
   }
 
   .products__inner {
@@ -3550,6 +3574,8 @@ body:has(.strength--move) .bottle__jet {
   .products-visual__background {
     inset-block-end: 0;
     inline-size: max(62.65625vw, 697px);
+    opacity: var(--products-background-opacity, 0);
+    transform: translateX(calc(var(--products-background-translate-x, -25) * 1%));
   }
 
   .visual-buttons {
@@ -3771,7 +3797,7 @@ body:has(.strength--move) .bottle__jet {
   }
 
   .visual-buttons__item:has(.visual-button:hover)::after {
-    inline-size: max(5.2083333333vw, 75px);
+    inline-size: max(4.6875vw, 65px);
   }
 
   .products:has(.visual-images:hover) .products-content__buttons::after {
@@ -4000,18 +4026,26 @@ body:has(.strength--move) .bottle__jet {
     padding-block-start: 20.8333333333vw;
   }
 
+  .strength__background {
+    aspect-ratio: 720/1016;
+    transition-property: opacity, visibility;
+    transition-duration: 1s;
+  }
+
   .strength-top__inner {
     flex-direction: column;
     justify-content: end;
     align-items: start;
   }
 
-  .strength-text {
-    transform: translateY(100%);
+  .strength-right {
+    padding-block-start: 0;
   }
 
   .glass {
-    translate: -50% 0;
+    translate: -50% calc(var(--glass-translate-y, 0) * 1px);
+    transition-property: opacity;
+    transition-duration: 0.3s;
   }
 
   .quote__inner {
@@ -4059,7 +4093,7 @@ body:has(.strength--move) .bottle__jet {
 
   .products-content__title {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     order: -1;
   }
 
@@ -4105,6 +4139,22 @@ body:has(.strength--move) .bottle__jet {
   }
 }
 
+@media (hover: hover) and (max-width: 768px) {
+  .button:hover {
+    color: #fff;
+    background-color: #000;
+  }
+
+  .visual-buttons__item:has(.visual-button:hover)::after {
+    inline-size: 14.7222222222vw;
+  }
+
+  .products:has(.visual-images:hover) .products-content__buttons::after {
+    inset-inline-start: calc(100% - 31.25vw);
+    inline-size: 31.25vw;
+  }
+}
+
 @media (max-width: 768px) and (hover: none) {
   .products.products--active .visual-images__image--red {
     z-index: -1;
@@ -4130,11 +4180,6 @@ body:has(.strength--move) .bottle__jet {
 @media (hover: hover) {
   :focus-visible:hover {
     outline: none;
-  }
-
-  .button:hover {
-    color: #fff;
-    background-color: #000;
   }
 
   .footer-bottom__text a:hover {
@@ -4166,11 +4211,6 @@ body:has(.strength--move) .bottle__jet {
     color: #fff;
   }
 
-  .visual-buttons__item:has(.visual-button:hover)::after {
-    content: "";
-    inline-size: 14.7222222222vw;
-  }
-
   .visual-buttons:has(.visual-buttons__item:nth-child(1) .visual-button:hover) .visual-buttons__icon:nth-child(1) {
     color: #fff;
   }
@@ -4200,8 +4240,6 @@ body:has(.strength--move) .bottle__jet {
   }
 
   .products:has(.visual-images:hover) .products-content__buttons::after {
-    inset-inline-start: calc(100% - 31.25vw);
-    inline-size: 31.25vw;
     background-color: #5da44b;
   }
 

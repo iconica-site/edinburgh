@@ -12780,12 +12780,20 @@ function initScroll() {
     /** @type { {breakpoint: "min" | "max" | "always"} } */
     const { breakpoint } = dataset;
 
-    element.toggleAttribute("data-scroll", breakpoint === "min" && MIN_769_PX.matches);
-    element.toggleAttribute("data-scroll-sticky", breakpoint === "min" && MIN_769_PX.matches);
-    element.toggleAttribute("data-scroll", breakpoint === "max" && !MIN_769_PX.matches);
-    element.toggleAttribute("data-scroll-sticky", breakpoint === "max" && !MIN_769_PX.matches);
-    element.toggleAttribute("data-scroll", breakpoint === "always");
-    element.toggleAttribute("data-scroll-sticky", breakpoint === "always");
+    switch (breakpoint) {
+      case "min":
+        element.toggleAttribute("data-scroll", MIN_769_PX.matches);
+        element.toggleAttribute("data-scroll-sticky", MIN_769_PX.matches);
+        break;
+      case "max":
+        element.toggleAttribute("data-scroll", !MIN_769_PX.matches);
+        element.toggleAttribute("data-scroll-sticky", !MIN_769_PX.matches);
+        break;
+      case "always":
+        element.setAttribute("data-scroll", "");
+        element.setAttribute("data-scroll-sticky", "");
+        break;
+    }
   });
 
   /** @type {HTMLElement} */
@@ -12829,6 +12837,8 @@ function initScroll() {
   /** @type {HTMLElement} */
   const strengthBottomSectionText = document.querySelector(".strength-right");
   /** @type {HTMLElement} */
+  const strengthBottomSectionRightText = document.querySelector(".strength-right__text");
+  /** @type {HTMLElement} */
   const quoteSection = document.querySelector(".quote");
   /** @type {HTMLElement} */
   const quoteSectionInner = document.querySelector(".quote__inner");
@@ -12848,6 +12858,8 @@ function initScroll() {
   const footerBackground = document.querySelector(".footer-top__background");
   const footerWhiskey = document.querySelector(".footer-top__whiskey");
   const footerShine = document.querySelector(".footer-top__shine");
+
+  let glassBottom = 0;
 
   const locomotive = new locomotive_scroll_esm({
     el: document.querySelector(".wrapper"),
@@ -12872,12 +12884,13 @@ function initScroll() {
     document.body.classList.toggle("scrolled", scroll.y > 0);
 
     strengthSection?.classList.toggle("strength--fill", strengthSection.getBoundingClientRect().top <= 0);
-    strengthSection?.classList.toggle("strength--ices", strengthBottomSection.getBoundingClientRect().top <= 0);
 
     MIN_769_PX.matches ? desktopObserver() : mobileObserver();
   });
 
   function desktopObserver() {
+    strengthSection?.classList.toggle("strength--ices", strengthBottomSection.getBoundingClientRect().top <= 0);
+
     setProperty(bottle, "--bottle-rotate", strengthSection, 0, 86);
     setProperty(bottle, "--bottle-translate-x", strengthSection, 0, 100);
     setProperty(bottle, "--bottle-height", strengthSection, 937, 1157);
@@ -12956,30 +12969,52 @@ function initScroll() {
   }
 
   function mobileObserver() {
+    document.body.classList.toggle("end-bottle-animation", strengthBottomSection?.getBoundingClientRect().top < innerHeight * 0.9);
+    strengthSection?.classList.toggle("strength--ices", strengthBottomSection?.getBoundingClientRect().top < innerHeight * 0.25);
+    glass?.classList.toggle("glass--fade", strengthBottomSection?.getBoundingClientRect().top < innerHeight * 0.9 && strengthBottomSection?.getBoundingClientRect().top > innerHeight * 0.25);
+
+    if (glass?.classList.contains("glass--fade")) glassBottom = glass?.getBoundingClientRect().bottom + 70;
+
+    glass?.style.setProperty("--glass-translate-y",
+      strengthBottomSectionText?.getBoundingClientRect().top < glassBottom ?
+        strengthBottomSectionText?.getBoundingClientRect().top - glassBottom : 0
+    );
+
     setProperty(bottle, "--bottle-height", heroCenterSection, 1024, 900);
+    setProperty(bottle, "--bottle-rotate", strengthSection, 0, 86);
+    setProperty(bottleCap, "--bottle-cap-opacity", strengthSection, 1, 0);
+    setProperty(bottleCap, "--bottle-cap-translate-y", strengthSection, 0, -200);
     setProperty(heroBackgroundImage, "--hero-background-image-blur", heroCenterSection, 0, 30);
     setProperty(heroBackgroundImage, "--hero-background-image-translate-y", heroCenterSection, 0, -25);
     setProperty(heroImage, "--hero-image-translate-y", heroCenterSection, 100, 0);
     setProperty(heroBottomSectionContent, "--hero-bottom-content", heroBottomSection, -20, 0);
+    setProperty(glassWhiskey, "--glass-whiskey-fill", strengthTopSection, 42, 156);
 
     if (heroBottomSection?.getBoundingClientRect().top > innerHeight) {
       setProperty(bottle, "--bottle-left", heroCenterSection, 50, 32 / 720 * innerWidth * 100 / innerWidth);
-      setProperty(bottle, "--bottle-translate-y", heroCenterSection, 66, -15);
-      setProperty(bottle, "--bottle-translate-x", heroCenterSection, 0, -50);
+      setProperty(bottle, "--bottle-translate-y", heroCenterSection, 16, -60);
+      setProperty(bottle, "--bottle-translate-x", heroCenterSection, -50, 0);
     } else if (agingSection?.getBoundingClientRect().top > innerHeight) {
       setProperty(bottle, "--bottle-left", heroBottomSection, 32 / 720 * innerWidth * 100 / innerWidth, 50);
-      setProperty(bottle, "--bottle-translate-y", heroBottomSection, -15, 0);
-      setProperty(bottle, "--bottle-translate-x", heroBottomSection, -50, 0);
+      setProperty(bottle, "--bottle-translate-y", heroBottomSection, -60, -50);
+      setProperty(bottle, "--bottle-translate-x", heroBottomSection, 0, -50);
       setProperty(bottle, "--bottle-opacity", heroBottomSection, 1, 0.2);
     } else if (agingSectionContent?.getBoundingClientRect().top > innerHeight) {
       setProperty(bottle, "--bottle-left", agingSection, 50, 100 - 32 / 720 * innerWidth * 100 / innerWidth);
-      setProperty(bottle, "--bottle-translate-x", agingSection, 0, -50 + 100 + 32 / 720 * innerWidth * 100 / innerWidth);
+      setProperty(bottle, "--bottle-translate-x", agingSection, -50, -100);
       setProperty(bottle, "--bottle-opacity", agingSection, 0.2, 1);
-    } else {
+    } else if (strengthSection?.getBoundingClientRect().top > innerHeight) {
       setProperty(bottle, "--bottle-left", agingSectionContent, 100 - 32 / 720 * innerWidth * 100 / innerWidth, 50);
-      setProperty(bottle, "--bottle-translate-x", agingSectionContent, -50 + 100 + 32 / 720 * innerWidth * 100 / innerWidth, 0);
+      setProperty(bottle, "--bottle-translate-x", agingSectionContent, -100, -50);
       setProperty(bottle, "--bottle-opacity", agingSectionContent, 1, 0.2);
+    } else {
+      setProperty(bottle, "--bottle-left", strengthSection, 50, 0);
+      setProperty(bottle, "--bottle-translate-x", strengthSection, -50, (100 + 70 / 720 * innerWidth * 100 / innerWidth) * -1);
+      setProperty(bottle, "--bottle-translate-y", strengthSection, -50, -100 + 90 / 720 * innerWidth * 100 / innerWidth);
+      setProperty(bottle, "--bottle-opacity", strengthSection, 0.2, 1);
     }
+
+
   }
 
   /**
