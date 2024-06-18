@@ -2112,7 +2112,7 @@ body:has(.strength--move) .bottle__jet {
 }
 
 .strength-right__icon {
-  inline-size: 6.25vw;
+  inline-size: 23.6111111111vw;
   aspect-ratio: 1/1;
   margin-inline: auto 2.65625vw;
   margin-block-end: 0.9895833333vw;
@@ -3473,6 +3473,10 @@ body:has(.strength--move) .bottle__jet {
 
   .strength-right {
     max-inline-size: max(20.8333333333vw, 300px);
+  }
+
+  .strength-right__icon {
+    inline-size: max(6.25vw, 90px);
   }
 
   .strength-right__temperature {
