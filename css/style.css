@@ -3997,7 +3997,7 @@ body:has(.strength--move) .bottle__jet {
 
   .hero__background > picture img,
   .hero__background > img {
-    transform: translateY(calc(var(--hero-background-image-translate-y, 0) * 1%));
+    transform: translateY(calc(var(--hero-background-image-translate-y, 0) * 1%)) translateZ(0);
   }
 
   .aging__inner {
