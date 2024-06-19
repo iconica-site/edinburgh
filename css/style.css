@@ -1759,7 +1759,8 @@ body:has(.strength--move) .bottle__jet {
 .hero__background > picture img,
 .hero__background > img {
   filter: blur(calc(var(--hero-background-image-blur) * 1px));
-  transform: translateZ(0, 0, 0);
+  transform: translateZ(0);
+  will-change: filter, transform;
 }
 
 .hero__image {
