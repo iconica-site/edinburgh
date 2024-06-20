@@ -2078,7 +2078,7 @@ body:has(.strength--move) .bottle__jet {
   position: relative;
   isolation: isolate;
   z-index: 1;
-  min-block-size: 222vh;
+  min-block-size: 166vh;
 }
 
 .strength-top__inner {
@@ -3623,7 +3623,7 @@ body:has(.strength--move) .bottle__jet {
   }
 
   .glass__jet {
-    inline-size: max(2.4479166667vw, 35px);
+    inline-size: max(1.25vw, 18px);
   }
 
   .quote__inner {
@@ -4148,6 +4148,10 @@ body:has(.strength--move) .bottle__jet {
 
   .strength-right {
     padding-block-start: 0;
+  }
+
+  .strength-right__icon {
+    display: none;
   }
 
   .glass {
