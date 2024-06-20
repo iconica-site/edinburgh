@@ -1112,7 +1112,7 @@ body:not(.start-animation) .main {
 .footer-top__inner {
   position: relative;
   isolation: isolate;
-  padding-block: 149.0277777778vw 0;
+  padding-block: 149.0277777778vw 0.8333333333vw;
   padding-inline: max(4.4444444444vw, 16px);
   overflow: hidden;
 }
@@ -1139,11 +1139,9 @@ body:not(.start-animation) .main {
 
 .footer-top__background {
   position: absolute;
-  inset-block-start: 0;
-  inset-inline: 0;
+  inset: 0;
   z-index: -1;
   font-size: 0;
-  mix-blend-mode: lighten;
 }
 
 .footer-top__whiskey {
@@ -1165,8 +1163,8 @@ body:not(.start-animation) .main {
 
 .footer-top__shine {
   position: absolute;
-  inset-block-start: -10.5292792793%;
-  inset-inline-end: 10.6944444444%;
+  inset-block-start: -3.7757437071%;
+  inset-inline-end: 10.8333333333%;
   z-index: 1;
   inline-size: 55.4166666667%;
   aspect-ratio: 363/362;
@@ -1603,6 +1601,26 @@ body:not(.start-animation) .bottle,
 body:not(.init) .bottle {
   opacity: 0;
   visibility: hidden;
+}
+
+.fill-glass .bottle {
+  animation: bottle-rotate 1s linear 1.35s forwards;
+}
+
+@keyframes bottle-rotate {
+  0% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+
+  100% {
+    translate: 10% 0;
+    rotate: -4deg;
+  }
+}
+
+.end-fill-glass .bottle {
+  animation-play-state: paused;
 }
 
 .end-bottle-animation .bottle {
@@ -2059,25 +2077,14 @@ body:has(.strength--move) .bottle__jet {
 .strength-top {
   position: relative;
   isolation: isolate;
-  inset-block-start: 0;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  min-block-size: 111vh;
-}
-
-.strength-top__container {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  inline-size: 100%;
+  min-block-size: 222vh;
 }
 
 .strength-top__inner {
   display: flex;
-  justify-content: space-between;
   align-items: end;
-  flex: 1 1 auto;
+  min-block-size: 111vh;
   padding-block-end: 8.3333333333vw;
 }
 
@@ -2190,14 +2197,99 @@ body:has(.strength--move) .bottle__jet {
   inset-inline-start: 8.4668674699%;
   z-index: 1;
   inline-size: 83.1325301205%;
-  block-size: calc(var(--glass-whiskey-fill, 42) / 399 * 100%);
+  block-size: 10.5263157895%;
+  overflow: visible;
 }
 
+.fill-glass .glass__whiskey:nth-of-type(1) {
+  animation: fill-glass 1s linear 0.5s forwards;
+}
+
+.end-fill-glass .glass__whiskey:nth-of-type(1) {
+  animation-play-state: paused;
+  block-size: 39.0977443609%;
+}
+
+@keyframes fill-glass {
+  0% {
+    block-size: 10.5263157895%;
+  }
+
+  100% {
+    block-size: 39.0977443609%;
+  }
+}
+
+.glass__whiskey:nth-of-type(2) {
+  block-size: 39.0977443609%;
+  opacity: 0;
+}
+
+.end-fill-glass .glass__whiskey:nth-of-type(2) {
+  opacity: 1;
+}
+
+.glass__whiskey > picture img,
 .glass__whiskey img {
   -o-object-fit: cover;
   object-fit: cover;
   -o-object-position: 50% 100%;
   object-position: 50% 100%;
+}
+
+.glass__jet {
+  --height: calc(
+    var(--whiskey-jet-height) - 24.42 / 399 * 100 * var(--glass-height) / 100 - 42 / 399 * 100 * var(--glass-height) /
+      100
+  );
+  position: absolute;
+  inset-block-end: calc(100% + var(--height) * 1px);
+  inset-inline-start: calc(var(--whiskey-jet-left) * 1px);
+  block-size: 0;
+  inline-size: 2.6041666667vw;
+  opacity: 0.4;
+  transform: scaleY(1);
+  transform-origin: bottom;
+}
+
+.fill-glass .glass__jet {
+  animation: bottle-jet 2s linear forwards;
+}
+
+.end-fill-glass .glass__jet {
+  animation-play-state: paused;
+  opacity: 0;
+}
+
+@keyframes bottle-jet {
+  0% {
+    inset-block-end: calc(100% + var(--height) * 1px);
+    block-size: 0;
+    transform: scaleY(1);
+  }
+
+  25% {
+    inset-block-end: 100%;
+    block-size: calc(var(--height) * 1px);
+    transform: scaleY(1);
+  }
+
+  75% {
+    inset-block-end: 100%;
+    block-size: calc((var(--height) - 28.0701754386 * var(--glass-height) / 100) * 1px);
+    transform: scaleY(1);
+  }
+
+  100% {
+    inset-block-end: 100%;
+    block-size: calc((var(--whiskey-jet-height) - 28.0701754386 * var(--glass-height) / 100) * 1px);
+    transform: scaleY(0);
+  }
+}
+
+.glass__jet img {
+  -o-object-position: 50% 0;
+  object-position: 50% 0;
 }
 
 .glass__full {
@@ -2210,11 +2302,10 @@ body:has(.strength--move) .bottle__jet {
   opacity: 0;
 }
 
-.strength--fill .glass__full {
-  transition-property: opacity;
-  transition-duration: 0.5s;
+.strength--ices .glass__full {
   opacity: 1;
-  visibility: visible;
+  transition-property: opacity;
+  transition-duration: 0.3s;
 }
 
 .glass__ices {
@@ -2749,6 +2840,9 @@ body:has(.strength--move) .bottle__jet {
   inset-block-start: -3.6111111111vw;
   inset-inline-end: -9.0277777778vw;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-block-size: 5.5555555556vw;
   padding-inline: 2.2222222222vw;
   font-family: "Inter", sans-serif;
@@ -3200,17 +3294,28 @@ body:has(.strength--move) .bottle__jet {
   }
 
   .footer-top__background {
-    inset: 0;
+    mix-blend-mode: lighten;
     opacity: var(--footer-background-opacity, 0);
     transform: translateX(calc(var(--footer-background-translate-x, -25%) * 1%));
+  }
+
+  .footer-top__whiskey {
+    translate: calc(var(--translate-x) / 15 * 1%) 0;
+    transition-property: translate;
+    transition-duration: var(--duration, 1000ms);
+    transition-timing-function: linear;
   }
 
   .footer-top__shine {
     inset-block-start: min(-29.8484848485%, -148px);
     inset-inline-end: max(8.5714285714%, 81px);
+    inline-size: max(28.7301587302%, 272px);
     opacity: var(--footer-shine-opacity, 0);
     transform: translateX(calc(var(--footer-shine-translate-x, 50%) * 1%));
-    inline-size: max(28.7301587302%, 272px);
+    translate: calc(var(--translate-x) / 5 * -1%) 0;
+    transition-property: translate;
+    transition-duration: var(--duration, 1000ms);
+    transition-timing-function: linear;
   }
 
   .button:hover,
@@ -3463,13 +3568,15 @@ body:has(.strength--move) .bottle__jet {
   }
 
   .strength-top {
-    min-block-size: max(60.6770833333vw, 842px);
+    min-block-size: max(90.9895833333vw, 1263px);
     opacity: var(--strength-top-opacity, 0);
+    opacity: 1;
     transform: translateY(calc(var(--strength-top-translate-y, 100) * 1%));
   }
 
   .strength-top__inner {
-    padding-block-end: max(8.3333333333vw, 90px);
+    min-block-size: max(60.6770833333vw, 842px);
+    padding-block-end: max(14.6354166667vw, 210px);
   }
 
   .strength-text {
@@ -3510,9 +3617,13 @@ body:has(.strength--move) .bottle__jet {
   }
 
   .glass {
-    inset-block-start: 44.7210300429%;
+    inset-block-start: max(27.1354166667vw, 358px);
     inset-inline-start: calc(var(--glass-left, 1070) / 1920 * 100%);
     inline-size: max(17.2916666667vw, 249px);
+  }
+
+  .glass__jet {
+    inline-size: max(2.4479166667vw, 35px);
   }
 
   .quote__inner {
@@ -3906,10 +4017,6 @@ body:has(.strength--move) .bottle__jet {
 
   .footer-top__inner {
     margin-inline: min(-4.4444444444vw, -16px);
-  }
-
-  .footer-top__background {
-    block-size: 99.0373725934%;
   }
 
   .footer-top__background::after {

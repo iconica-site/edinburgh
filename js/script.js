@@ -12792,6 +12792,8 @@ function initScroll() {
   /** @type {HTMLElement} */
   const bottleCap = document.querySelector(".bottle__cap");
   /** @type {HTMLElement} */
+  const bottleBackground = document.querySelector(".bottle__background");
+  /** @type {HTMLElement} */
   const heroBackgroundImage = document.querySelector(".hero__background");
   /** @type {HTMLElement} */
   const heroImage = document.querySelector(".hero__image");
@@ -12817,6 +12819,8 @@ function initScroll() {
   const glass = document.querySelector(".glass");
   /** @type {HTMLElement} */
   const glassWhiskey = document.querySelector(".glass__whiskey");
+  /** @type {HTMLElement} */
+  const glassJet = document.querySelector(".glass__jet");
   /** @type {HTMLElement} */
   const strengthSection = document.querySelector(".strength");
   /** @type {HTMLElement} */
@@ -12855,6 +12859,7 @@ function initScroll() {
   const footerShine = document.querySelector(".footer-top__shine");
 
   let glassBottom = 0;
+  let isUpdate = false;
 
   /** @type {LocomotiveScroll} */
   const locomotive = new LocomotiveScroll({
@@ -12863,7 +12868,7 @@ function initScroll() {
     smooth: true,
     reloadOnContextChange: true,
     repeat: true,
-    lerp: 0.05,
+    lerp: MIN_769_PX.matches ? 0.05 : 0.2,
     smartphone: {
       smooth: true,
       direction: "vertical",
@@ -12874,12 +12879,39 @@ function initScroll() {
     },
   });
 
+  window.__jr__.locomotive = locomotive;
+
   locomotive.on("scroll", (event) => {
     const { scroll } = event;
 
     document.body.classList.toggle("scrolled", scroll.y > 0);
-
+    document.body.classList.toggle("end-fill-glass", strengthBottomSection?.getBoundingClientRect().top <= innerHeight);
     strengthSection?.classList.toggle("strength--fill", strengthSection.getBoundingClientRect().top <= 0);
+
+    if (strengthSection?.getBoundingClientRect().top <= 0) {
+      document.body.classList.add("fill-glass");
+      const { bottom: capBottom } = bottleCap?.getBoundingClientRect();
+      const { right: bottleRight } = bottleBackground?.getBoundingClientRect();
+      const { left: glassLeft } = glassWhiskey?.getBoundingClientRect();
+      const { height: glassHeight, bottom: glassBottom } = glass?.getBoundingClientRect();
+      const jetHeight = Math.abs(capBottom - glassBottom);
+      const jetLeft = Math.abs(bottleRight - glassLeft);
+
+      glassJet?.style.setProperty("--whiskey-jet-height", jetHeight + 9);
+      glassJet?.style.setProperty("--whiskey-jet-left", jetLeft - 9);
+      glassJet?.style.setProperty("--glass-height", glassHeight);
+    } else {
+      document.body.classList.remove("fill-glass");
+    }
+
+    if (!isUpdate && footer?.getBoundingClientRect().top <= innerHeight) {
+      isUpdate = true;
+      locomotive.update();
+    }
+
+    if (footer?.getBoundingClientRect().top > innerHeight) {
+      isUpdate = false;
+    }
 
     MIN_769_PX.matches ? desktopObserver() : mobileObserver();
   });
@@ -12887,7 +12919,7 @@ function initScroll() {
   function desktopObserver() {
     strengthSection?.classList.toggle("strength--ices", strengthBottomSection.getBoundingClientRect().top <= 0);
 
-    setProperty(bottle, "--bottle-rotate", strengthSection, 0, 86);
+    setProperty(bottle, "--bottle-rotate", strengthSection, 0, 90);
     setProperty(bottle, "--bottle-translate-x", strengthSection, 0, 100);
     setProperty(bottle, "--bottle-height", strengthSection, 937, 1157);
     setProperty(bottleCap, "--bottle-cap-opacity", strengthSection, 1, 0);
@@ -12912,7 +12944,7 @@ function initScroll() {
     setProperty(footerBackground, "--footer-background-opacity", footer, 0, 1);
     setProperty(footerBackground, "--footer-background-translate-x", footer, -25, 0);
     setProperty(footerWhiskey, "--footer-whiskey-opacity", footer, 0, 1);
-    setProperty(footerWhiskey, "--footer-whiskey-translate-x", footer, 25, 0);
+    setProperty(footerWhiskey, "--footer-whiskey-translate-x", footer, 35, 10);
     setProperty(footerShine, "--footer-shine-opacity", footer, 0, 1);
     setProperty(footerShine, "--footer-shine-translate-x", footer, 50, 0);
 
@@ -13071,13 +13103,16 @@ if (remove_start_button) {
 }
 
 ;// CONCATENATED MODULE: ./src/js/scripts/scripts/products.js
+const MIN_769_PX = matchMedia("(min-width: 768.1px)");
+
+/** @type {HTMLElement} */
 const productsSection = document.querySelector(".products");
 /** @type {NodeListOf<HTMLLIElement>} */
 const visualButtonItems = document.querySelectorAll(".visual-buttons__item");
 /** @type {NodeListOf<HTMLElement>} */
 const visualImagesBlocks = document.querySelectorAll(".visual-images__block");
 /** @type {NodeListOf<HTMLButtonElement>} */
-const productGreenButtons = document.querySelectorAll(".products-content__button");
+const productButtons = document.querySelectorAll(".products-content__button");
 /** @type {HTMLElement} */
 const productsTextsBlock = document.querySelector(".products-content__texts");
 /** @type {NodeListOf<HTMLParagraphElement>} */
@@ -13106,7 +13141,7 @@ visualButtonItems.forEach(currentItem => {
   }
 });
 
-productGreenButtons.forEach(button => {
+productButtons.forEach(button => {
   button.addEventListener("click", () => {
     productsSection?.classList.toggle("products--active");
   });
@@ -13132,7 +13167,149 @@ if (productsTextsBlock) {
   productsTextsBlockResizeObserver.observe(productsTextsBlock);
 }
 
+if (!MIN_769_PX.matches) {
+  /** @type {HTMLElement} */
+  const productsVisual = document.querySelector(".products-visual");
+
+  /** @type {number} */
+  let startX;
+  /** @type {number} */
+  let startY;
+  /** @type {number} */
+  let endX;
+  /** @type {number} */
+  let endY;
+
+  productsVisual?.addEventListener("touchstart", event => {
+    const { touches } = event;
+    const { clientX, clientY } = touches[0];
+
+    startX = clientX;
+    startY = clientY;
+  });
+
+  productsVisual?.addEventListener("touchend", event => {
+    const { changedTouches } = event;
+    const { clientX, clientY } = changedTouches[0];
+
+    endX = clientX;
+    endY = clientY;
+
+    calculateAngle(startX, startY, endX, endY);
+  });
+
+  productsVisual?.addEventListener("click", event => {
+    /** @type { { target: HTMLElement } } */
+    const { target } = event;
+
+    if (!target.closest(".visual-buttons")) productsSection?.classList.toggle("products--active");
+  });
+
+  /**
+   * @param {number} startX
+   * @param {number} startY
+   * @param {number} endX
+   * @param {number} endY
+   */
+  function calculateAngle(startX, startY, endX, endY) {
+    const xDifference = startX - endX;
+    const yDifference = startY - endY;
+    const angleRad = Math.atan2(yDifference, xDifference);
+
+    let angleDeg = angleRad * (180 / Math.PI);
+
+    angleDeg = (angleDeg + 360) % 360;
+
+    if (Math.abs(xDifference) > 30) determineDirection(angleDeg);
+  }
+
+  /**
+   * @param {number} angle
+   * @param {number} tolerance
+   */
+  function determineDirection(angle, tolerance = 30) {
+    if ((angle >= 360 - tolerance) || (angle <= 0 + tolerance)) {
+      productsSection?.classList.add("products--active");
+    } else if ((angle >= 180 - tolerance) && (angle <= 180 + tolerance)) {
+      productsSection?.classList.remove("products--active");
+    }
+  }
+}
+
+;// CONCATENATED MODULE: ./src/js/scripts/scripts/footer.js
+const { body: footer_body } = document;
+/** @type {HTMLElement} */
+const footer = document.querySelector(".footer");
+const { style } = footer;
+
+const footer_MIN_769_PX = matchMedia("(min-width: 768.1px)");
+
+let bodyInlineCenter, bodyBlockCenter, durationTimeout;
+
+if (footer_MIN_769_PX.matches) observe();
+
+footer_MIN_769_PX.addEventListener("change", event => {
+  const { matches } = event;
+
+  if (matches) {
+    observe();
+  } else {
+    footer_body.removeEventListener("mousemove", mousemove);
+
+    removePosition();
+  }
+});
+
+footer_body.addEventListener("mouseenter", () => {
+  setDuration(100);
+});
+
+footer_body.addEventListener("mouseleave", () => {
+  removePosition();
+});
+
+function observe() {
+  const bodyResizeObserver = new ResizeObserver(entries => {
+    entries.forEach(entry => {
+      const { borderBoxSize } = entry;
+      const { inlineSize, blockSize } = borderBoxSize[0];
+
+      [bodyInlineCenter, bodyBlockCenter] = [inlineSize / 2, blockSize / 2];
+    });
+  });
+
+  bodyResizeObserver.observe(footer_body);
+
+  footer_body.addEventListener("mousemove", mousemove);
+}
+
+function mousemove(event) {
+  const { clientX, clientY } = event;
+  const translateX = (clientX - bodyInlineCenter) / bodyInlineCenter * 100;
+
+  style.setProperty("--translate-x", translateX);
+}
+
+function removePosition() {
+  setDuration();
+
+  style.removeProperty("--translate-x");
+}
+
+function setDuration(duration = 1000) {
+  style.setProperty("--duration", `${duration}ms`);
+
+  if (durationTimeout) clearTimeout(durationTimeout);
+
+  durationTimeout = setTimeout(removeDuration, duration);
+}
+
+function removeDuration() {
+  style.removeProperty("--duration");
+}
+
 ;// CONCATENATED MODULE: ./src/js/scripts/scripts.js
+
 
 
 
@@ -13142,7 +13319,7 @@ const { __jr__: facts_jr_ } = window;
 const { swiper } = facts_jr_;
 const { Swiper: facts_Swiper, modules } = swiper;
 const { EffectFade: facts_EffectFade, Navigation: facts_Navigation, Pagination: facts_Pagination, Controller: facts_Controller, } = modules;
-const MIN_769_PX = matchMedia("(min-width: 768.1px)");
+const facts_MIN_769_PX = matchMedia("(min-width: 768.1px)");
 /** @type {HTMLElement} */
 const factsSection = document.querySelector(".facts");
 
@@ -13234,7 +13411,7 @@ if (factsSection) {
     });
   }
 
-  if (!MIN_769_PX.matches) {
+  if (!facts_MIN_769_PX.matches) {
     textsSlider.controller.control = imagesSlider;
     imagesSlider.controller.control = textsSlider;
   }
