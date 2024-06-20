@@ -12868,7 +12868,7 @@ function initScroll() {
     smooth: true,
     reloadOnContextChange: true,
     repeat: true,
-    lerp: MIN_769_PX.matches ? 0.05 : 0.2,
+    lerp: MIN_769_PX.matches ? 0.05 : 0.1,
     smartphone: {
       smooth: true,
       direction: "vertical",
