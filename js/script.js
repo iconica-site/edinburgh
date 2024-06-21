@@ -13085,18 +13085,25 @@ const remove_start_button = document?.querySelector(".start__button");
 const body = document.body;
 
 if (remove_start_button) {
-  remove_start_button.addEventListener("click", () => {
-    start.classList.add("start--remove");
-
-    setTimeout(() => {
-      body.classList.add("start-animation");
-      initScroll();
+  if (!localStorage.getItem("is-adulthood-confirmed")) {
+    remove_start_button.addEventListener("click", () => {
+      start.classList.add("start--remove");
+      localStorage.setItem("is-adulthood-confirmed", true);
 
       setTimeout(() => {
-        start.remove();
-      }, 1000);
+        body.classList.add("start-animation");
+        initScroll();
+
+        setTimeout(() => {
+          start.remove();
+        }, 1000);
+      });
     });
-  });
+  } else {
+    start.remove();
+    body.classList.add("start-animation");
+    initScroll();
+  }
 } else {
   body.classList.add("start-animation");
   initScroll();

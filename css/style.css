@@ -1151,7 +1151,7 @@ body:not(.start-animation) .main {
   font-size: 0;
   mix-blend-mode: lighten;
   opacity: var(--footer-whiskey-opacity, 0);
-  transform: translateX(calc(var(--footer-whiskey-translate-x, 25%) * 1%));
+  transform: translateX(calc(var(--footer-whiskey-translate-x, 25) * 1%));
 }
 
 .footer-top__whiskey::after {
@@ -2019,6 +2019,7 @@ body:has(.strength--move) .bottle__jet {
 }
 
 .aging-title__text {
+  display: block;
   font-weight: 300;
   font-size: 8.3333333333vw;
   line-height: 1.1;
@@ -2300,12 +2301,14 @@ body:has(.strength--move) .bottle__jet {
   inline-size: 83.1325301205%;
   block-size: 94.4862155388%;
   opacity: 0;
+  transition-property: opacity;
+  transition-duration: 0.3s;
+  transition-timing-function: linear;
 }
 
 .strength--ices .glass__full {
   opacity: 1;
-  transition-property: opacity;
-  transition-duration: 0.3s;
+  transition-duration: 0.5s;
 }
 
 .glass__ices {
@@ -3296,7 +3299,7 @@ body:has(.strength--move) .bottle__jet {
   .footer-top__background {
     mix-blend-mode: lighten;
     opacity: var(--footer-background-opacity, 0);
-    transform: translateX(calc(var(--footer-background-translate-x, -25%) * 1%));
+    transform: translateX(calc(var(--footer-background-translate-x, -25) * 1%));
   }
 
   .footer-top__whiskey {
@@ -3311,7 +3314,7 @@ body:has(.strength--move) .bottle__jet {
     inset-inline-end: max(8.5714285714%, 81px);
     inline-size: max(28.7301587302%, 272px);
     opacity: var(--footer-shine-opacity, 0);
-    transform: translateX(calc(var(--footer-shine-translate-x, 50%) * 1%));
+    transform: translateX(calc(var(--footer-shine-translate-x, 50) * 1%));
     translate: calc(var(--translate-x) / 5 * -1%) 0;
     transition-property: translate;
     transition-duration: var(--duration, 1000ms);
@@ -3629,7 +3632,7 @@ body:has(.strength--move) .bottle__jet {
   .quote__inner {
     max-inline-size: max(30.7291666667vw, 440px);
     opacity: var(--quote-inner-opacity, 0);
-    transform: translateY(calc(var(--quote-inner-translate-y, 100%) * 1%));
+    transform: translateY(calc(var(--quote-inner-translate-y, 100) * 1%));
   }
 
   .quote__text {
@@ -3849,10 +3852,6 @@ body:has(.strength--move) .bottle__jet {
   }
 
   .cocktails__header {
-    position: -webkit-sticky;
-    position: sticky;
-    inset-block-start: 0;
-    z-index: 1;
     min-inline-size: max(14.3229166667vw, 206px);
     padding-block-start: max(3.2291666667vw, 46px);
   }
