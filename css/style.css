@@ -3932,7 +3932,9 @@ body:has(.strength--move) .bottle__jet {
   }
 
   body:not(.start-animation) .hero__background > picture img,
-  body:not(.start-animation) .hero__background > img {
+  body:not(.init) .hero__background > picture img,
+  body:not(.start-animation) .hero__background > img,
+  body:not(.init) .hero__background > img {
     transform: translateY(-3.90625vw);
   }
 }
