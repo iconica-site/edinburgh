@@ -13132,8 +13132,18 @@ visualButtonItems.forEach(currentItem => {
   if (button) {
     const { dataset } = button;
     const { size: currentSize } = dataset;
+    /** @type {HTMLButtonElement} */
+    const icon = currentItem.closest(".visual-buttons").querySelector(`.visual-buttons__icon--${currentSize}`);
 
     button.addEventListener("click", () => {
+      changeBottle();
+    });
+
+    icon?.addEventListener("click", () => {
+      changeBottle();
+    });
+
+    function changeBottle() {
       visualButtonItems.forEach(item => {
         item.classList.toggle("visual-buttons__item--active", item === currentItem);
       });
@@ -13143,8 +13153,8 @@ visualButtonItems.forEach(currentItem => {
         const { size } = dataset;
 
         block.classList.toggle("visual-images__block--active", size === currentSize);
-      })
-    });
+      });
+    }
   }
 });
 
